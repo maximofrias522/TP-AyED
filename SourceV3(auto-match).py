@@ -186,6 +186,5 @@ def main():
             en_construccion()
             time.sleep(1)  
 
-# Ejecutar el programa
 if __name__ == "__main__":
     main()
