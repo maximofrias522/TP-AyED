@@ -3,7 +3,7 @@ import getpass
 import time
 from datetime import datetime
 
-# Función para limpiar la pantalla 
+# Funcion para limpiar la pantalla 
 def limpiar_pantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -35,14 +35,14 @@ estudiantes = [
     }
 ]
 
-# Función para calcular la edad a partir de la fecha de nacimiento
+# Funcion para calcular la edad a partir de la fecha de nacimiento
 def calcular_edad(fecha_nacimiento):
     fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%Y-%m-%d')
     hoy = datetime.today()
     edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
     return edad
 
-# Menú principal
+# Menu principal
 def mostrar_menu_principal():
     limpiar_pantalla()
     print("Menú Principal:")
@@ -52,7 +52,7 @@ def mostrar_menu_principal():
     print("4. Reportes estadísticos")
     print("0. Salir")
 
-# Módulo para gestionar el perfil del estudiante
+# Modulo para gestionar el perfil del estudiante
 def gestionar_perfil(estudiante):
     limpiar_pantalla()
     print("Gestionando perfil de", estudiante['nombre'])
@@ -60,7 +60,7 @@ def gestionar_perfil(estudiante):
     print("b. Eliminar mi perfil")
     print("c. Volver")
 
-# Módulo para editar datos personales
+# Modulo para editar datos personales
 def editar_datos_personales(estudiante):
     limpiar_pantalla()
     print("Editando datos personales de", estudiante['nombre'])
@@ -92,7 +92,7 @@ def editar_datos_personales(estudiante):
 
     input("Presiona Enter para continuar...")
 
-# Módulo para gestionar candidatos
+# Modulo para gestionar candidatos
 def gestionar_candidatos():
     limpiar_pantalla()
     print("Gestionando candidatos")
@@ -100,15 +100,14 @@ def gestionar_candidatos():
     print("b. Reportar un candidato")
     print("c. Volver")
 
-# Función para ver candidatos
-# Módulo para ver candidatos
+# Modulo para ver candidatos
 def ver_candidatos(estudiante_autenticado):
     candidatos_mostrados = False
     while not candidatos_mostrados:
         limpiar_pantalla()
         print("Ver candidatos:")
         for i, estudiante in enumerate(estudiantes, start=1):
-            if estudiante == estudiante_autenticado:  # Omitir la impresión del propio perfil
+            if estudiante == estudiante_autenticado:  # No ver mi propio perfil
                 continue
             edad = calcular_edad(estudiante['fecha_nacimiento'])
             print(f"{i}. Nombre: {estudiante['nombre']}")
@@ -124,7 +123,7 @@ def ver_candidatos(estudiante_autenticado):
             if candidato_seleccionado == estudiante_autenticado:
                 print("¡No puedes auto-matchearte!")
             else:
-                # Aquí incluimos la lógica para permitir al usuario ingresar el nombre para hacer un Matcheo
+                # Logica para permitir al usuario ingresar el nombre para hacer un Matcheo
                 nombre_matcheo = input("Ingresa el nombre del estudiante con el que te gustaría hacer un Matcheo en el futuro: ")
                 if nombre_matcheo == candidato_seleccionado['nombre']:
                     print("¡Matcheo exitoso! Has seleccionado al candidato correctamente.")
@@ -135,11 +134,11 @@ def ver_candidatos(estudiante_autenticado):
         else:
             print("Opción inválida.")
 
-# Función para mostrar que la opción está en construcción
+# Funcion para mostrar que la opcion esta en construccion
 def en_construccion():
     print("En construcción.")
 
-# Función principal
+# Funcion principal
 def main():
     intentos = 3
     usuario_autenticado = False
@@ -185,7 +184,7 @@ def main():
                 print("Opción no válida.")
         else:
             en_construccion()
-            time.sleep(1)  # Espera 1 segundo antes de continuar
+            time.sleep(1)  
 
 # Ejecutar el programa
 if __name__ == "__main__":
