@@ -122,6 +122,7 @@ def ver_candidatos(estudiante_autenticado):
             
             if candidato_seleccionado == estudiante_autenticado:
                 print("¡No puedes auto-matchearte!")
+                time.sleep(1)
             else:
                 # Logica para permitir al usuario ingresar el nombre para hacer un Matcheo
                 nombre_matcheo = input("Ingresa el nombre del estudiante con el que te gustaría hacer un Matcheo en el futuro: ")
@@ -150,6 +151,7 @@ def main():
         for estudiante in estudiantes:
             if email == estudiante['email'] and contraseña == estudiante['contraseña']:
                 print("¡Inicio de sesión exitoso!")
+                time.sleep(1)
                 usuario_autenticado = True
                 estudiante_autenticado = estudiante
         if not usuario_autenticado:
@@ -158,6 +160,7 @@ def main():
 
     if not usuario_autenticado:
         print("Has agotado tus intentos. Programa cerrado.")
+        time.sleep(1)
         return
 
     while True:
@@ -173,6 +176,7 @@ def main():
                 continue
             else:
                 print("Opción no válida.")
+                time.sleep(1)
         elif opcion == "2":
             gestionar_candidatos()
             sub_opcion = input("Elige una opción: ")
@@ -182,6 +186,7 @@ def main():
                 continue
             else:
                 print("Opción no válida.")
+                time.sleep(1)
         else:
             en_construccion()
             time.sleep(1)  
