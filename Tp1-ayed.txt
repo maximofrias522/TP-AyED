@@ -1,0 +1,71 @@
+TP1
+
+# Validacion de ingreso: Usuario y Contraseña
+# Tiene que pedir usuario y contraseña al mismo 
+# 
+
+# Menu principal: 
+
+1. Gestionar mi perfil
+2. Gestionar candidatos
+3. Matcheos
+4. Reportes estadísticos
+0. Salir (log out)
+
+	Sub menu 1:
+	1. Gestionar mi perfil
+		a. Editar mis datos personales
+			Editando datos personales de estudiante
+   			¿Qué datos deseas editar?
+    			1. Fecha de nacimiento
+    			2. Biografía
+   			3. Hobbies
+    			4. Volver
+//		b. Eliminar mi perfil (No funcional)
+		c. Volver 
+
+	Sub menu 2:
+	2. Gestionar candidatos
+		a. Ver candidatos
+			Gestionando candidatos
+   			a. Ver candidatos
+    			b. Reportar un candidato (No funcional)
+    			c. Volver
+//		b. Reportar un candidato (No funcional)
+		c. Volver 
+
+//	Sub menu 3: (No funcional)
+//	3. Matcheos
+//		a. Ver matcheos
+//		b. Eliminar un matcheo
+//		c. Volver
+
+//	Sub menu 4: (no funcional)
+//	4. Reportes estadísticos
+
+# (No funcional) Tiene que dar como resultado "En Construccion..."	
+
+# Usuarios:
+# estudiante1@ayed.com
+	Nombre: Tomás Farias
+	Fecha de nacimiento: 24 de noviembre de 2002 (24/12/2002)
+	Biografía: estudia ingeniería en sistemas, su materia favorita es análisis matemático, es de Rosario
+	Hobbies: pescar, jugar al fútbol
+	Contraseña: 111222
+
+# estudiante2@ayed.com	
+	Nombre: Matias Cejas
+	Fecha de nacimiento: 8 de octubre de 2003 (08/08/2003)
+	Biografía: estudia ingeniería en sistemas, su materia favorita es algoritmo , es de Rosario
+	Hobbies: salir a correr, cocinar
+	Contraseña: 333444	
+
+# estudiante3@ayed.com
+	Nombre: Máximo Holder
+	Fecha de nacimiento: 6 de diciembre de 2004 (06/12/2004)
+	Biografía: estudia ingeniería en sistemas, su materia favorita es física, es de Rosario
+	Hobbies: leer libros de ficción, salir a remar
+	Contraseña: 333444
+
+# Ruleta ¿?
+	
