@@ -1,5 +1,8 @@
 import os
-import getpass as gp
+import getpass as gp # Tiene que cambiar los caracteres de entrada por * (actualmente los oculta)
+import time
+
+usuario_actual = None
 
 # Datos estudiantes
 estudiante1_nombre = 'Estudiante 1'
@@ -23,11 +26,11 @@ estudiante3_fechaNacimiento = '06-12-2004'
 estudiante3_biografia = 'Estudia ingeniería en sistemas, su materia favorita es física, es de Rosario.'
 estudiante3_hobbies = 'Leer libros de ficción, salir a remar.'
 
-# Funcion limpiar CLI
+# limpiar CLI
 def limpiarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-# Funcion obtener mail login
+# obtener mail login
 def obtenerEmail():
     email = input('Introduzca su email: ')
     while email != estudiante1_email and email != estudiante2_email and email != estudiante3_email:
@@ -36,7 +39,7 @@ def obtenerEmail():
 
     return email
 
-# Funcion obtener contraseña login
+# obtener contraseña login
 def obtenerContrasena(email):
     intentos = 3
 
@@ -70,7 +73,7 @@ def obtenerContrasena(email):
         if intentos == 0:
             return False
 
-# Funcion inicio de sesion       
+# inicio de sesion       
 def iniciarSesion():
     email = obtenerEmail()
     logged = obtenerContrasena(email)
@@ -79,7 +82,7 @@ def iniciarSesion():
     else:
         return False
 
-# Funcion menu principal
+# menu principal
 def mostrarMenuPrincipal():
     limpiarPantalla()
     print("Menú Principal:")
@@ -89,9 +92,23 @@ def mostrarMenuPrincipal():
     print("4. Reportes estadísticos")
     print("0. Salir")
 
-# 
+# gestionar perfil
 def gestionarPerfil():
-    return
+    limpiarPantalla()
+    print("Estas gestionando tu perfil")
+    print("a. Editar mis datos personales")
+    print("b. Eliminar mi perfil")
+    print("c. Volver")
+
+# editar datos personales
+def editar_datos_personales():
+    limpiarPantalla()
+    print("Estas editando tus datos personales")
+    print("¿Qué datos deseas editar?")
+    print("a. Fecha de nacimiento")
+    print("b. Biografía")
+    print("c. Hobbies")
+    print("d. Volver")
 
 # 
 def gestionarCandidatos():
@@ -99,7 +116,9 @@ def gestionarCandidatos():
 
 #
 def enConstruccion():
+    limpiarPantalla()
     print("En construcción.")
+    time.sleep(1)
 
 #
 def manejarMenuPrincipal(opcion):
@@ -112,17 +131,22 @@ def manejarMenuPrincipal(opcion):
 
 # Funcion principal
 def main():
+    global usuario_actual
     email = iniciarSesion()
     if email == False:
         print('Se introdujo una contraseña incorrecta 3 veces')
         return
+    
+    usuario_actual = email
     
     limpiarPantalla()
     mostrarMenuPrincipal()
     opcion = input('Seleccione una opción: ')
     while opcion != '0':
         manejarMenuPrincipal(opcion)
-
+        limpiarPantalla()
+        mostrarMenuPrincipal()
+        
         opcion = input('Seleccione una opción: ')
     return
     

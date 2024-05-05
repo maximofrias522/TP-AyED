@@ -45,27 +45,27 @@ TP1
 
 # (No funcional) Tiene que dar como resultado "En Construccion..."	
 
-# Usuarios:
-# estudiante1@ayed.com
-	Nombre: Tomás Farias
-	Fecha de nacimiento: 24 de noviembre de 2002 (24/12/2002)
-	Biografía: estudia ingeniería en sistemas, su materia favorita es análisis matemático, es de Rosario
-	Hobbies: pescar, jugar al fútbol
-	Contraseña: 111222
+# Datos estudiantes
+estudiante1_nombre = 'Estudiante 1'
+estudiante1_email = 'estudiante1@ayed.com'
+estudiante1_contrasena = '111222'
+estudiante1_fechaNacimiento = '24-11-2002'
+estudiante1_biografia = 'Estudia ingeniería en sistemas, su materia favorita es análisis matemático, es de Rosario.'
+estudiante1_hobbies = 'Pescar, jugar al fútbol.'
 
-# estudiante2@ayed.com	
-	Nombre: Matias Cejas
-	Fecha de nacimiento: 8 de octubre de 2003 (08/08/2003)
-	Biografía: estudia ingeniería en sistemas, su materia favorita es algoritmo , es de Rosario
-	Hobbies: salir a correr, cocinar
-	Contraseña: 333444	
+estudiante2_nombre = 'Estudiante 2'
+estudiante2_email = 'estudiante2@ayed.com'
+estudiante2_contrasena = '222333'
+estudiante2_fechaNacimiento = '08-10-2003'
+estudiante2_biografia = 'Estudia ingeniería en sistemas, su materia favorita es algoritmos, es de Rosario.'
+estudiante2_hobbies = 'Salir a correr, cocinar.'
 
-# estudiante3@ayed.com
-	Nombre: Máximo Holder
-	Fecha de nacimiento: 6 de diciembre de 2004 (06/12/2004)
-	Biografía: estudia ingeniería en sistemas, su materia favorita es física, es de Rosario
-	Hobbies: leer libros de ficción, salir a remar
-	Contraseña: 333444
+estudiante3_nombre = 'Estudiante 3'
+estudiante3_email = 'estudiante3@ayed.com'
+estudiante3_contrasena = '333444'
+estudiante3_fechaNacimiento = '06-12-2004'
+estudiante3_biografia = 'Estudia ingeniería en sistemas, su materia favorita es física, es de Rosario.'
+estudiante3_hobbies = 'Leer libros de ficción, salir a remar.'
 
 # Ruleta ¿?
 	
