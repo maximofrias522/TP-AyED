@@ -264,7 +264,7 @@ def ruleta():
     else:
         return
 
-# o usar "No disponible." para mas generalidad
+#
 def enConstruccion():
     limpiarPantalla()
     print("En construcción.")
