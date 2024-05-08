@@ -272,14 +272,20 @@ def enConstruccion():
 
 #
 def manejarMenuPrincipal(opcion):
+        
     if opcion == '1':
         gestionarPerfil()
     elif opcion == '2':
         gestionarCandidatos()
+    elif opcion == '3':
+        enConstruccion()
+    elif opcion == '4':
+        enConstruccion()
     elif opcion == '5':
         ruleta()
     else:
-        enConstruccion()
+        print("la opcion ingresada no es valida.")
+        time.sleep(1)
 
 # Funcion principal
 def main():
