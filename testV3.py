@@ -4,6 +4,14 @@ import time
 import random as r
 from datetime import datetime
 
+asciiart = '''
+  _   _   _____   _   _           __  __       _       _     _ 
+ | | | | |_   _| | \ | |         |  \/  | __ _| |_ ___| |__ | |
+ | | | |   | |   |  \| |  _____  | |\/| |/ _` | __/ __| '_ \| |
+ | |_| |   | |   | |\  | |_____| | |  | | (_| | || (__| | | |_|
+  \___/    |_|   |_| \_|         |_|  |_|\__,_|\__\___|_| |_(_)
+'''
+
 usuario_actual = None # se asigna al usuario que inicio sesion
 
 # Datos estudiantes
@@ -92,6 +100,7 @@ def iniciarSesion():
 # menu principal
 def mostrarMenuPrincipal():
     limpiarPantalla()
+    print(asciiart)
     print("Bienvenido, ", usuario_actual)
     print("Menú Principal:")
     print("1. Gestionar mi perfil")
@@ -107,24 +116,52 @@ def gestionarPerfil():
     limpiarPantalla()
     print("Estas gestionando tu perfil")
     print("a. Editar mis datos personales")
-    print("b. Eliminar mi perfil")
-    print("c. Volver")
+    print("b. Ver mi perfil")
+    print("c. Eliminar mi perfil")
+    print("d. Volver")
     opcion = input('Seleccione una opción: ')
 
     if opcion == 'a':
-        editar_datos_personales()  
+        editar_datos_personales()
     elif opcion == 'b':
+        miPerfil()  
+    elif opcion == 'c':
         enConstruccion()
         gestionarPerfil()
-    elif opcion == 'c':
+    elif opcion == 'd':
         mostrarMenuPrincipal()
     else:
         opcion_no_valida()
         gestionarPerfil()
-        
 
+# ver perfil
+def miPerfil():
+    limpiarPantalla()
+    print("Perfil de ", usuario_actual)
+    if usuario_actual == estudiante1_email:
+        print("Nombre: " + estudiante1_nombre + "\n" +
+              "Biografía: " + estudiante1_biografia + "\n" +
+              "Fecha de nacimiento: " + estudiante1_fechaNacimiento + "\n" +
+              "Hobbies: " + estudiante1_hobbies)
+    elif usuario_actual == estudiante2_email:
+        print("Nombre: " + estudiante2_nombre + "\n" +
+              "Biografía: " + estudiante2_biografia + "\n" +
+              "Fecha de nacimiento: " + estudiante2_fechaNacimiento + "\n" +
+              "Hobbies: " + estudiante2_hobbies)
+    elif usuario_actual == estudiante3_email:
+        print("Nombre: " + estudiante3_nombre + "\n" +
+              "Biografía: " + estudiante3_biografia + "\n" +
+              "Fecha de nacimiento: " + estudiante3_fechaNacimiento + "\n" +
+              "Hobbies: " + estudiante3_hobbies)
+    input("Presiona enter para volver al menu...")
+    gestionarPerfil()
+    
 # editar datos personales
 def editar_datos_personales():
+    global estudiante1_fechaNacimiento, estudiante1_biografia, estudiante1_hobbies
+    global estudiante2_fechaNacimiento, estudiante2_biografia, estudiante2_hobbies
+    global estudiante3_fechaNacimiento, estudiante3_biografia, estudiante3_hobbies
+
     limpiarPantalla()
     print("Estas editando tus datos personales")
     print("¿Qué datos deseas editar?")
@@ -148,14 +185,17 @@ def editar_datos_personales():
             estudiante1_fechaNacimiento = nuevo_valor
             print("Su nueva fecha de nacimiento es:", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_fechaNacimiento = nuevo_valor
             print("Su nueva fecha de nacimiento es:", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_fechaNacimiento = nuevo_valor
             print("Su nueva fecha de nacimiento es:", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
 
     elif opcion == 'b':
         nuevo_valor = input("Ingrese la nueva biografía: ")
@@ -163,14 +203,17 @@ def editar_datos_personales():
             estudiante1_biografia = nuevo_valor
             print("Su nueva biografia es: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_biografia = nuevo_valor
             print("Su nueva biografia es: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_biografia = nuevo_valor
             print("Su nueva biografia es: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
 
     elif opcion == 'c':
         nuevo_valor = input("Ingrese los nuevos hobbies: ")
@@ -178,14 +221,17 @@ def editar_datos_personales():
             estudiante1_hobbies = nuevo_valor
             print("Sus nuevos hobbies son: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_hobbies = nuevo_valor
             print("Sus nuevos hobbies son: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_hobbies = nuevo_valor
             print("Sus nuevos hobbies son: ", nuevo_valor)
             input("Presione enter para continuar...")
+            editar_datos_personales()
 
     elif opcion == 'd':
         gestionarPerfil()
@@ -296,11 +342,11 @@ def ruleta():
 
             buffer = r.randint(0, 100)
             if buffer > 100 - af1:
-                print('¡Matcheaste con Persona A')
+                print('¡Matcheaste con Persona A, su nombre es: ', estudiante1_nombre)
             elif buffer > 100 - af1 - af2:
-                print('¡Matcheaste con Persona B')
+                print('¡Matcheaste con Persona B, su nombre es: ', estudiante2_nombre)
             elif buffer > 100 - af1 - af2 - af3:
-                print('¡Matcheaste con Persona C')
+                print('¡Matcheaste con Persona C, su nombre es: ', estudiante3_nombre)
         except ValueError:
             print("Error: los valores ingresados tienen que ser numericos.")
 
@@ -336,7 +382,7 @@ def manejarMenuPrincipal(opcion):
     elif opcion == '5':
         ruleta()
     elif opcion == 'salir':
-        obtenerEmail()
+        iniciarSesion()
     else:
         opcion_no_valida()
 
