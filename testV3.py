@@ -2,6 +2,7 @@ import os
 import pwinput as p
 import time
 import random as r
+from datetime import datetime
 
 usuario_actual = None # se asigna al usuario que inicio sesion
 
@@ -98,7 +99,8 @@ def mostrarMenuPrincipal():
     print("3. Matcheos")
     print("4. Reportes estadísticos")
     print("5. Ruleta")
-    print("0. Salir")
+    print("0. Salir del programa")
+    print("tipee salir para cerrar sesion.")
 
 # gestionar perfil
 def gestionarPerfil():
@@ -113,9 +115,13 @@ def gestionarPerfil():
         editar_datos_personales()  
     elif opcion == 'b':
         enConstruccion()
-        return
+        gestionarPerfil()
     elif opcion == 'c':
-        return
+        mostrarMenuPrincipal()
+    else:
+        opcion_no_valida()
+        gestionarPerfil()
+        
 
 # editar datos personales
 def editar_datos_personales():
@@ -129,31 +135,63 @@ def editar_datos_personales():
     opcion = input("Seleccione una opcion: ")
 
     if opcion == 'a':
-        nuevo_valor = input("Ingrese la nueva fecha de nacimiento (dd-mm-aaaa): ")
+        formato_correcto = False
+        while not formato_correcto:
+            nuevo_valor = input("Ingrese la nueva fecha de nacimiento (dd-mm-aaaa): ")
+            try:
+                datetime.strptime(nuevo_valor, "%d-%m-%Y")
+                formato_correcto = True
+            except ValueError:
+                print("El formato de fecha ingresado es incorrecto. Intente nuevamente.")
+
         if usuario_actual == 'estudiante1@ayed.com':
             estudiante1_fechaNacimiento = nuevo_valor
+            print("Su nueva fecha de nacimiento es:", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_fechaNacimiento = nuevo_valor
+            print("Su nueva fecha de nacimiento es:", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_fechaNacimiento = nuevo_valor
+            print("Su nueva fecha de nacimiento es:", nuevo_valor)
+            input("Presione enter para continuar...")
+
     elif opcion == 'b':
         nuevo_valor = input("Ingrese la nueva biografía: ")
         if usuario_actual == 'estudiante1@ayed.com':
             estudiante1_biografia = nuevo_valor
+            print("Su nueva biografia es: ", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_biografia = nuevo_valor
+            print("Su nueva biografia es: ", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_biografia = nuevo_valor
+            print("Su nueva biografia es: ", nuevo_valor)
+            input("Presione enter para continuar...")
+
     elif opcion == 'c':
         nuevo_valor = input("Ingrese los nuevos hobbies: ")
         if usuario_actual == 'estudiante1@ayed.com':
             estudiante1_hobbies = nuevo_valor
+            print("Sus nuevos hobbies son: ", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante2@ayed.com':
             estudiante2_hobbies = nuevo_valor
+            print("Sus nuevos hobbies son: ", nuevo_valor)
+            input("Presione enter para continuar...")
         elif usuario_actual == 'estudiante3@ayed.com':
             estudiante3_hobbies = nuevo_valor
+            print("Sus nuevos hobbies son: ", nuevo_valor)
+            input("Presione enter para continuar...")
+
     elif opcion == 'd':
-        return
+        gestionarPerfil()
+    else:
+        opcion_no_valida()
+        editar_datos_personales()
 
 # gestionar candidatos
 def gestionarCandidatos():
@@ -168,9 +206,12 @@ def gestionarCandidatos():
         VerCanditatos()
     elif opcion == 'b':
         enConstruccion()
-        return
+        gestionarCandidatos()
     elif opcion == 'c':
-        return
+        mostrarMenuPrincipal()
+    else:
+        opcion_no_valida()
+        gestionarPerfil()
     
 # Ver candidatos # agregar funcion de calculo edad # 
 def VerCanditatos():
@@ -193,8 +234,8 @@ def VerCanditatos():
             print("Hiciste match con", estudiante3_nombre)
             time.sleep(1)
         else:
-            print("Opción inválida")
-            time.sleep(1)
+            opcion_no_valida()
+            VerCanditatos()
     elif usuario_actual == estudiante2_email:
         print("a. " + estudiante1_nombre + "\n" +
               "Biografía: " + estudiante1_biografia + "\n" +
@@ -212,8 +253,8 @@ def VerCanditatos():
             print("Hiciste match con", estudiante3_nombre)
             time.sleep(1)
         else:
-            print("Opción inválida")
-            time.sleep(1)
+            opcion_no_valida()
+            VerCanditatos()
     elif usuario_actual == estudiante3_email:
         print("a. " + estudiante1_nombre + "\n" +
               "Biografía: " + estudiante1_biografia + "\n" +
@@ -231,8 +272,8 @@ def VerCanditatos():
             print("Hiciste match con", estudiante2_nombre)
             time.sleep(1)
         else:
-            print("Opción inválida")
-            time.sleep(1)
+            opcion_no_valida()
+            VerCanditatos()
  
 # Ruleta
 def ruleta():
@@ -265,13 +306,20 @@ def ruleta():
 
         input('Presione enter para continuar...')
         ruleta()
+    elif opcion == 'b':
+        mostrarMenuPrincipal()
     else:
-        return
+        opcion_no_valida()
+        ruleta()
 
 #
 def enConstruccion():
-    limpiarPantalla()
+    # limpiarPantalla()
     print("En construcción.")
+    time.sleep(1)
+
+def opcion_no_valida():
+    print("Error: la opcion ingresada no es valida.")
     time.sleep(1)
 
 #
@@ -287,9 +335,10 @@ def manejarMenuPrincipal(opcion):
         enConstruccion()
     elif opcion == '5':
         ruleta()
+    elif opcion == 'salir':
+        obtenerEmail()
     else:
-        print("la opcion ingresada no es valida.")
-        time.sleep(1)
+        opcion_no_valida()
 
 # Funcion principal
 def main():
@@ -306,6 +355,5 @@ def main():
         limpiarPantalla()
         mostrarMenuPrincipal()
         opcion = input('Seleccione una opción: ')
-    return
-    
+
 main()
