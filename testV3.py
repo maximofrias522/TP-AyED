@@ -242,25 +242,29 @@ def ruleta():
     print("b. Volver")
     opcion = input('Seleccione una opción: ')
     if opcion == 'a':
-        af1 = int(input('Introduzca la afinidad con Persona A: '))
-        af2 = int(input('Introduzca la afinidad con Persona B: '))
-        af3 = int(input('Introduzca la afinidad con Persona C: '))
-
-        while af1 + af2 + af3 != 100:
-            print('Los valores introducidos no suman 100, intente nuevamente.')
+        try:    
             af1 = int(input('Introduzca la afinidad con Persona A: '))
             af2 = int(input('Introduzca la afinidad con Persona B: '))
             af3 = int(input('Introduzca la afinidad con Persona C: '))
 
-        buffer = r.randint(0, 100)
-        if buffer > 100 - af1:
-            print('¡Matcheaste con Persona A')
-        elif buffer > 100 - af1 - af2:
-            print('¡Matcheaste con Persona B')
-        elif buffer > 100 - af1 - af2 - af3:
-            print('¡Matcheaste con Persona C')
+            while af1 + af2 + af3 != 100:
+                print('Los valores introducidos no suman 100, intente nuevamente.')
+                af1 = int(input('Introduzca la afinidad con Persona A: '))
+                af2 = int(input('Introduzca la afinidad con Persona B: '))
+                af3 = int(input('Introduzca la afinidad con Persona C: '))
+
+            buffer = r.randint(0, 100)
+            if buffer > 100 - af1:
+                print('¡Matcheaste con Persona A')
+            elif buffer > 100 - af1 - af2:
+                print('¡Matcheaste con Persona B')
+            elif buffer > 100 - af1 - af2 - af3:
+                print('¡Matcheaste con Persona C')
+        except ValueError:
+            print("Error: los valores ingresados tienen que ser numericos.")
 
         input('Presione enter para continuar...')
+        ruleta()
     else:
         return
 
