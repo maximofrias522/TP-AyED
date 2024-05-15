@@ -1,9 +1,9 @@
 import os
-# import pwinput as p
 import time
 import random as r
 from datetime import datetime
 import maskpass
+import sys
 
 asciiart1 = '''
   _   _   _____   _   _           __  __       _       _     _ 
@@ -14,11 +14,11 @@ asciiart1 = '''
 '''
 
 asciiart2 = '''
-  _        ___     ____           ___   _   _ 
- | |      / _ \   / ___|         |_ _| | \ | |
- | |     | | | | | |  _   _____   | |  |  \| |
- | |___  | |_| | | |_| | |_____|  | |  | |\  |
- |_____|  \___/   \____|         |___| |_| \_|
+  _        ___     ____   ___   _   _ 
+ | |      / _ \   / ___| |_ _| | \ | |
+ | |     | | | | | |  _   | |  |  \| |
+ | |___  | |_| | | |_| |  | |  | |\  |
+ |_____|  \___/   \____| |___| |_| \_|                                    
 '''
 
 usuario_actual = None # se asigna al usuario que inicio sesion
@@ -45,6 +45,11 @@ estudiante3_fechaNacimiento = '06-12-2004'
 estudiante3_biografia = 'Estudia ingeniería en sistemas, su materia favorita es física, es de Rosario.'
 estudiante3_hobbies = 'Leer libros de ficción, salir a remar.'
 
+# limpiar una línea específica de la terminal
+def limpiarLinea():
+    sys.stdout.write("\033[F")  # mueve el cursor una línea hacia arriba
+    sys.stdout.write("\033[K")  # borra la línea actual
+
 # limpiar CLI
 def limpiarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -57,7 +62,8 @@ def obtenerEmail():
     while email != estudiante1_email and email != estudiante2_email and email != estudiante3_email:
         print('Usuario no encontrado')
         time.sleep(1)
-        obtenerEmail()
+        limpiarPantalla()  
+        print(asciiart2)
         email = input('Introduzca su email: ')
 
     return email
@@ -66,35 +72,55 @@ def obtenerEmail():
 def obtenerContrasena(email):
     intentos = 3
 
-    if email == 'estudiante1@ayed.com':
-        while intentos > 0:
-            if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante1_contrasena:
-                print('Contraseña incorrecta, intente nuevamente.')
-                intentos -= 1
-            else:
-                return True
-        if intentos == 0:
-            return False
+    while intentos > 0:
+        contrasena = maskpass.advpass(prompt='Introduzca la contraseña: ', mask='*')
+        if email == estudiante1_email and contrasena == estudiante1_contrasena:
+            return True
+        elif email == estudiante2_email and contrasena == estudiante2_contrasena:
+            return True
+        elif email == estudiante3_email and contrasena == estudiante3_contrasena:
+            return True
+        else:
+            limpiarLinea()  
+            print('Contraseña incorrecta, intente nuevamente.')
+            time.sleep(1)
+            limpiarLinea()
+            intentos -= 1
+
+    if intentos == 0:
+        return False
+    
+    # intentos = 3
+
+    # if email == 'estudiante1@ayed.com':
+    #     while intentos > 0:
+    #         if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante1_contrasena:
+    #             print('Contraseña incorrecta, intente nuevamente.')
+    #             intentos -= 1
+    #         else:
+    #             return True
+    #     if intentos == 0:
+    #         return False
         
-    elif email == 'estudiante2@ayed.com':
-        while intentos > 0:
-            if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante2_contrasena:
-                print('Contraseña incorrecta, intente nuevamente.')
-                intentos -= 1
-            else:
-                return True
-        if intentos == 0:
-            return False
+    # elif email == 'estudiante2@ayed.com':
+    #     while intentos > 0:
+    #         if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante2_contrasena:
+    #             print('Contraseña incorrecta, intente nuevamente.')
+    #             intentos -= 1
+    #         else:
+    #             return True
+    #     if intentos == 0:
+    #         return False
         
-    elif email == 'estudiante3@ayed.com':
-        while intentos > 0:
-            if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante3_contrasena:
-                print('Contraseña incorrecta, intente nuevamente.')
-                intentos -= 1
-            else:
-                return True
-        if intentos == 0:
-            return False
+    # elif email == 'estudiante3@ayed.com':
+    #     while intentos > 0:
+    #         if maskpass.advpass(prompt = 'Introduzca la contraseña: ', mask = '*') != estudiante3_contrasena:
+    #             print('Contraseña incorrecta, intente nuevamente.')
+    #             intentos -= 1
+    #         else:
+    #             return True
+    #     if intentos == 0:
+    #         return False
 
 # inicio de sesion       
 def iniciarSesion():
