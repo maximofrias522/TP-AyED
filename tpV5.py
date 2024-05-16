@@ -380,11 +380,11 @@ def ruleta():
 
             buffer = r.randint(0, 100)
             if buffer > 100 - af1:
-                print('¡Matcheaste con Persona A, su nombre es: ', estudiante1_nombre)
+                print('Matcheaste con Persona A, su nombre es: ', estudiante1_nombre)
             elif buffer > 100 - af1 - af2:
-                print('¡Matcheaste con Persona B, su nombre es: ', estudiante2_nombre)
+                print('Matcheaste con Persona B, su nombre es: ', estudiante2_nombre)
             elif buffer > 100 - af1 - af2 - af3:
-                print('¡Matcheaste con Persona C, su nombre es: ', estudiante3_nombre)
+                print('Matcheaste con Persona C, su nombre es: ', estudiante3_nombre)
         except ValueError:
             print("Error: los valores ingresados tienen que ser numericos.")
 
