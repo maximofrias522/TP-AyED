@@ -7,6 +7,6 @@ Universidad Tecnologica Nacional (Facultad Regional Rosario)
 Integrantes del grupo N°8:
 
 * Máximo Frías
-* Ezequiel Rueda
+* Joaquín Laschera
 * Mateo Vuelta
-* Joaquin Laschera
+* Ezequiel Rueda
