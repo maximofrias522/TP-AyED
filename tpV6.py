@@ -79,12 +79,12 @@ def enConstruccion():
 
 # Obtener usuario a partir de email
 # Busca el nombre de usuario asociado al email introducido
-def obtenerNombre():
-    if email_actual == estudiante1_email:
+def obtenerNombre(email):
+    if email == estudiante1_email:
         nombre = estudiante1_nombre
-    elif email_actual == estudiante2_email:
+    elif email == estudiante2_email:
         nombre = estudiante2_nombre
-    elif email_actual == estudiante3_email:
+    elif email == estudiante3_email:
         nombre = estudiante3_nombre
 
     return nombre
@@ -184,7 +184,7 @@ def iniciarSesion():
     contrasena_valida = obtenerContrasena()
     if contrasena_valida:
         global nombre_actual
-        nombre_actual = obtenerNombre()
+        nombre_actual = obtenerNombre(email_actual)
         print("Se inicio sesion correctamente, ", nombre_actual)
         continuar()
         return True
@@ -364,6 +364,7 @@ def gestionarPerfil():
 # Ver los candidatos y darle me gusta al seleccionado
 # Muestra los candidatos posible (todos los usuarios distintos del logueado) y le pide al usuario que seleccione uno para darle me gusta.
 def verCandidatos():
+
     if email_actual == estudiante1_email:
         opcion_a = estudiante2_email
         opcion_b = estudiante3_email
