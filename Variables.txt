@@ -1,0 +1,111 @@
+asciiart: String
+
+estudiante1_nombre: String
+estudiante1_email: String
+estudiante1_contrasena: String
+estudiante1_fechaNacimiento: String
+estudiante1_biografia: String
+estudiante1_hobbies: String
+
+estudiante2_nombre: String
+estudiante2_email: String
+estudiante2_contrasena: String
+estudiante2_fechaNacimiento: String
+estudiante2_biografia: String
+estudiante2_hobbies: String
+
+estudiante3_nombre: String
+estudiante3_email: String
+estudiante3_contrasena: String
+estudiante3_fechaNacimiento: String
+estudiante3_biografia: String
+estudiante3_hobbies: String
+
+email_actual: String
+nombre_actual: String
+
+obtenerNombre():
+    email: String
+    nombre: String
+
+obtenerFecha():
+    formato_correcto: Boolean
+    fecha: String
+    dtfecha: datetime (String)
+
+obtenerEdad():
+    fecha: datetime (String)
+    fecha_actual: datetime (String)
+    edad: int
+
+imprimirDatosDeUsuario():
+    usuario: String
+
+obtenerAfinidad():
+    p: String
+    es_valido: Boolean
+    af: int
+
+obtenerAfinidades():
+    af1: String
+    af2: String
+    af3: String
+
+obtenerEmail():
+    email: String
+
+obtenerContrasena():
+    intentos: int
+    contrasena: String
+
+iniciarSesion():
+    contrasena_valida: Boolean
+
+mostrarVerCandidatos():
+    opcion_a: String
+    opcion_b: String
+
+editarFechaNacimiento():
+    nueva_fecha: String
+
+editarBiografia():
+    estudiante1_biografia: String
+    estudiante2_biografia: String
+    estudiante3_biografia: String
+    nueva_biografia: String
+
+editarHobbies():
+    estudiante1_hobbies: String
+    estudiante2_hobbies: String
+    estudiante3_hobbies: String
+    nuevo_hobbie: String
+
+editarDatosPersonales():
+    opcion: String
+
+mostrarPerfil():
+    email_actual: String
+
+gestionarPerfil():
+    opcion: String
+
+verCandidatos():
+    opcion_a: String
+    opcion_b: String
+    opcion: String
+
+gestionarCandidatos():
+    opcion: String
+
+ruleta():
+    opcion: String
+    af1: int
+    af2: int
+    af3: int
+    buffer: int
+
+menuPrincipal():
+    opcion: String
+
+main():
+    sesion_iniciada: Boolean
