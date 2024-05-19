@@ -472,6 +472,8 @@ def menuPrincipal():
             enConstruccion()
         elif opcion == '5':
             ruleta()
+        elif opcion == '6':
+            limpiarPantalla()
         else:
             opcionInvalida()
 
