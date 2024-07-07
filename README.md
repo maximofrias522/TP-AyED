@@ -1,4 +1,4 @@
-# Trabajo Practico N°1 | Algoritmos y Estructuras de Datos
+# Trabajo Practico Anual | Algoritmos y Estructuras de Datos
  Universidad Tecnologica Nacional (Facultad Regional Rosario), 1º año Ingenieria en Sistemas de Informacion 
  ```markdown
  https://www.frro.utn.edu.ar/
@@ -14,9 +14,8 @@
  ---
 
  ### Informacion importante:
-* En la carpeta Versiones se encuentran las fases por las que paso el desarrollo de esta etapa.
-* En el archivo "Variables.txt" se encuentra la lista de todas las variables (y su tipo) utilizadas en el programa, ordenadas por linea y funcion.
-* La version Final y funcional del TP1 es la "tpV7", ubicada por fuera de la carpeta "Versiones".
+* El trabajo practico consiste en 3 partes que se iran agregando a medida que sean realizadas
+* Cada parte se agregara como una carpeta con el nombre TP# (El # es el numero de TP)
 ### IMPORTANTE
 * Para el correcto funcionamiento del programa, se debe importar la libreria maskpass.
 
