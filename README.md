@@ -16,6 +16,7 @@
  ### Informacion importante:
 * El trabajo practico consiste en 3 partes que se iran agregando a medida que sean realizadas
 * Cada parte se agregara como una carpeta con el nombre TP# (El # es el numero de TP)
+* Se elije el metodo de carpetas por encima de las ramas de git a modo de facilitarle la busqueda al usuario
 ### IMPORTANTE
 * Para el correcto funcionamiento del programa, se debe importar la libreria maskpass.
 
