@@ -7,7 +7,7 @@
 import os
 from random import randint
 from datetime import datetime
-from maskpass import advpass
+from maskpass import askpass
 
 # Declaración de variable globales ___________________________________________________________________________________________________________
 
@@ -206,7 +206,7 @@ def obtenerContrasena():
     intentos = 3
 
     while intentos > 0:
-        contrasena = advpass(prompt='Introduzca la contraseña: ', mask='*')
+        contrasena = askpass(prompt='Introduzca la contraseña: ')
         if (email_actual == estudiante1_email and contrasena == estudiante1_contrasena) or (email_actual == estudiante2_email and contrasena == estudiante2_contrasena) or (email_actual == estudiante3_email and contrasena == estudiante3_contrasena):
             return True
         else:
