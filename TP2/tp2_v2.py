@@ -1,4 +1,4 @@
-from maskpass import advpass
+from maskpass import askpass
 from tp2_v2_aux import *
 
 CANT_MAX_ESTUDIANTES = 8
@@ -48,7 +48,7 @@ def validarContrasenaEstudiante(index):
     intentos = 3
 
     while intentos > 0:
-        contrasena = advpass(prompt='Introduzca la contraseña: ', mask='*')
+        contrasena = askpass(prompt='Introduzca la contraseña: ')
         if estudiantes[index][2] == contrasena:
             currentEstudiante = index
             return True
