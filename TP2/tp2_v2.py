@@ -65,7 +65,7 @@ def validarContrasenaModerador(index):
     intentos = 3
 
     while intentos > 0:
-        contrasena = advpass(prompt='Introduzca la contraseña: ', mask='*')
+        contrasena = askpass(prompt='Introduzca la contraseña: ')
         if moderadores[index][1] == contrasena:
             currentModerador = index
             return True
