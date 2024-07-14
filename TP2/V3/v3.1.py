@@ -1,19 +1,27 @@
+# importar librerias 
 import os
 from random import randint
 from datetime import datetime
 from maskpass import askpass
 
+# declarar arrays de estudiantes y moderadores
+
 CANT_MAX_ESTUDIANTES = 8
 CANT_MAX_MODERADORES = 4
 
-estudiantesLen = 4
+estudiantesLen = 4 # cantidad minima de estudiantes para iniciar sesion # al enviar deben estar en 4
 estudiantes = [[''] * 6 for _ in range(CANT_MAX_ESTUDIANTES)] # A lo sumo 8 estudiantes con email, nombre, contraseña, fecha de nacimiento, biografía y hobbies como datos
+# array de maximo 8 filas por 6 columnas (cada columna es un dato, como se menciona en la linea anterior)
 
-moderadoresLen = 1
+moderadoresLen = 1 # cantidad minima de estudiantes para iniciar sesion # al enviar deben estar en 1
 moderadores = [[''] * 3 for _ in range(CANT_MAX_MODERADORES)] # A lo sumo 4 moderadores con email, nombre y contraseña como datos
+# array de maximo 4 filas por 3 columnas (cada columna es un dato, como se menciona en la linea anterior)
 
+# valor asignado para sesion no iniciada
 currentEstudiante = -1
 currentModerador = -1
+
+### Cartel
 
 asciiart = '''
  █████  ████████████████ ██████   █████    ██████   ██████           █████            █████     ███
@@ -26,6 +34,9 @@ asciiart = '''
   ░░░░░░░░     ░░░░░    ░░░░░    ░░░░░    ░░░░░     ░░░░░  ░░░░░░░░   ░░░░░   ░░░░░░ ░░░░ ░░░░░░░░ 
 '''
 
+### Cartel
+
+### Validacion email INICIO
 def buscarEstudiante(email):
     index = -1
     for i in range(CANT_MAX_ESTUDIANTES):
@@ -41,7 +52,9 @@ def buscarModerador(email):
             index = i
 
     return index
+### Validacion email FIN
 
+### Validacion contraseña INICIO
 def validarContrasenaEstudiante(index):
     global currentEstudiante
     intentos = 3
@@ -74,8 +87,10 @@ def validarContrasenaModerador(index):
                 print('Contraseña incorrecta, intente nuevamente.')
 
     if intentos == 0:
-        return False
+        return False    
+### Validacion contraseña FIN
 
+### Validar inicio de sesion INICIO
 def iniciarSesion(): # MODULARIZAR ESTA FUNCIÓN
     email = input('Introduzca su email: ')
     estudiante = buscarEstudiante(email)
@@ -101,7 +116,9 @@ def iniciarSesion(): # MODULARIZAR ESTA FUNCIÓN
         return validarContrasenaEstudiante(estudiante)
     else:
         return validarContrasenaModerador(moderador)
+### Validar inicio de sesion FIN 
 
+### Validacion de condiciones para log INICIO
 def utnMatch():
     if estudiantesLen < 4 or moderadoresLen < 1:
         print('El inicio de sesión no está disponible.')
@@ -115,7 +132,9 @@ def utnMatch():
 
     else:
         menuPrincipal()
+### Validacion de condiciones para log FIN
 
+### Funciones auxiliares INICIO
 def limpiarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
     print(asciiart)
@@ -131,7 +150,9 @@ def enConstruccion():
     limpiarPantalla()
     print("En construcción.")
     continuar()
+### Funciones auxiliares FIN
 
+### Calculo de edad a partir de la fecha INICIO
 def obtenerEdad(fecha):
     fecha = datetime.strptime(fecha, '%d-%m-%Y')
     fecha_actual = datetime.today()
@@ -139,23 +160,25 @@ def obtenerEdad(fecha):
     if (fecha_actual.month, fecha_actual.day) < (fecha.month, fecha.day): # Si el cumpleaños aún no sucedió le resta 1 a la diferencia de años
         edad -= 1
     return str(edad)
+### Calculo de edad a partir de la fecha FIN
 
+### Ver perfil INICIO
 def imprimirDatosDeEstudiante(estudiante):
     print("Nombre: " + estudiantes[estudiante][1] + "\n" +
           "Fecha de nacimiento: " + estudiantes[estudiante][3] + "\n" +
           "Edad: " + obtenerEdad(estudiantes[estudiante][3]) + "\n" +
           "Biografía: " + estudiantes[estudiante][4] + "\n" +
           "Hobbies: " + estudiantes[estudiante][5])
-
-def mostrarEditarDatosPersonales():
+    
+def mostrarPerfil():
     limpiarPantalla()
-    print("Estas editando tus datos personales")
-    print("¿Qué datos deseas editar?")
-    print("a. Fecha de nacimiento")
-    print("b. Biografía")
-    print("c. Hobbies")
-    print("d. Volver")
+    print("Estás viendo tu perfil")
+    imprimirDatosDeEstudiante(currentEstudiante)
 
+    continuar()
+### Ver perfil FIN
+
+### Validacion de fecha de nacimient al editar INICIO
 def obtenerFecha():
     formato_correcto = False
     while not formato_correcto:
@@ -180,7 +203,9 @@ def editarFechaNacimiento():
     estudiantes[currentEstudiante][3] = nueva_fecha
 
     continuar()
+### Validacion de fecha de nacimiento al editar FIN
 
+### Edicion de perfil Exepto fecha INICIO
 def editarBiografia():
     nueva_biografia = input("Ingrese la nueva biografía: ")
     while nueva_biografia == '':
@@ -201,6 +226,17 @@ def editarHobbies():
     print("Sus nuevos hobbies son: ", nuevo_hobbie)
 
     continuar()
+### Edicion de perfil Exepto fecha FIN
+
+### Menu editar datos personales INICIO
+def mostrarEditarDatosPersonales():
+    limpiarPantalla()
+    print("Estas editando tus datos personales")
+    print("¿Qué datos deseas editar?")
+    print("a. Fecha de nacimiento")
+    print("b. Biografía")
+    print("c. Hobbies")
+    print("d. Volver")
 
 def editarDatosPersonales():
     mostrarEditarDatosPersonales()
@@ -218,14 +254,9 @@ def editarDatosPersonales():
         
         mostrarEditarDatosPersonales()
         opcion = input("Seleccione una opción: ")
+### menu editar datos personales FIN
 
-def mostrarPerfil():
-    limpiarPantalla()
-    print("Estás viendo tu perfil")
-    imprimirDatosDeEstudiante(currentEstudiante)
-
-    continuar()
-
+### Eliminar perfil INICIO
 def eliminarPerfil():
     opcion = input('Presione 1 si está seguro de que desea eliminar su perfil o 0 para volver: ')
     while opcion != '0' and opcion != '1': 
@@ -237,6 +268,8 @@ def eliminarPerfil():
             dato = []
         print('Sus datos han sido eliminados correctamente')
 
+
+### Gestionar perfil INICIO
 def mostrarGEestionarPerfil():
     limpiarPantalla()
     print("Estas gestionando tu perfil")
@@ -261,7 +294,9 @@ def gestionarPerfil():
 
         mostrarGestionarPerfil()
         opcion = input('Seleccione una opción: ')
+### Gestionar perfil FIN
 
+### Gestionar candidatos INICIO
 def mostrarGestionarCandidatos():
     limpiarPantalla()
     print("Gestionando candidatos")
@@ -283,7 +318,9 @@ def gestionarCandidatos():
 
         mostrarGestionarCandidatos()
         opcion = input('Seleccione una opción: ')
+### Gestionar candidatos FIN
 
+### Menu principal INICIO
 def mostrarMenuPrincipal():
     limpiarPantalla()
     print("Bienvenido, ", estudiantes[currentEstudiante][1])
@@ -313,6 +350,7 @@ def menuPrincipal():
 
         mostrarMenuPrincipal()
         opcion = input('Seleccione una opción: ')
+### Menu principal FIN
 
 def verCandidatos():
     enConstruccion()
@@ -320,6 +358,7 @@ def verCandidatos():
 def mostrarGestionarPerfil():
     enConstruccion()
 
+### sign INICIO ######################################################################
 def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
     global estudiantesLen, estudiantes
     if estudiantesLen == 8:
@@ -351,7 +390,7 @@ def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
     estudiantesLen += 1
 
     print('El estudiante se registró exitosamente.')
-    continuar()
+    continuar()  
 
 def registrarModerador(): # MODULARIZAR
     global moderadoresLen, moderadores
@@ -376,7 +415,9 @@ def registrarModerador(): # MODULARIZAR
 
     print('El moderador se registró exitosamente.')
     continuar()
+### sign FIN #########################################################################
 
+### Menu registro INICIO
 def mostrarRegistrarse():
     limpiarPantalla()
     print('a. Registrarse como estudiante')
@@ -398,14 +439,9 @@ def registrarse():
 
         mostrarRegistrarse()
         opcion = input('Seleccione una opción: ')
+### Menu registro FIN
 
-
-
-
-
-
-
-
+### Menu inicial INICIO
 def mostrarMenuInicial():
     limpiarPantalla()
     print('1. Iniciar sesión')
@@ -427,13 +463,10 @@ def menuInicial():
 
         mostrarMenuInicial()
         opcion = input('Seleccione una opción: ')
+### Menu inicial FIN        
+menuInicial() # EJECUCION
 
-
-menuInicial()
-
-
-
-
+### Bonus track1 INICIO
 def bonus_track_1():
     index = 0
     edades = [0] * estudiantesLen
@@ -452,9 +485,9 @@ def bonus_track_1():
     for i in range(estudiantesLen):
         if edades[i] + 1 != edades[i + 1]:
             print(f'Existe un hueco entre {edades[i]} y {edades[i+1]}')
+### Bonus track1 FIN
 
-
-
+### Bonus track2 INICIO
 def bonus_track_2(): # lógica: el primer estudiante puede matchear con estudiantesLen -1 estudiante (todos menos él mismo),
                      # el segundo también tiene estudiantesLen -1 matcheos disponibles pero no se cuenta el matcheo que se
                      # registró con el primer estudiante, se puede probar que la secuencia es
@@ -464,3 +497,4 @@ def bonus_track_2(): # lógica: el primer estudiante puede matchear con estudian
         acum += estudiantesLen - i
 
     print(f'Hay {acum} matcheos posibles')
+### Bonus track2 FIN
