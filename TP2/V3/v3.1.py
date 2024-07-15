@@ -1,6 +1,6 @@
 # importar librerias 
 import os
-from random import randint
+import random
 from datetime import datetime
 from maskpass import askpass
 
@@ -10,12 +10,19 @@ CANT_MAX_ESTUDIANTES = 8
 CANT_MAX_MODERADORES = 4
 
 estudiantesLen = 4 # cantidad minima de estudiantes para iniciar sesion # al enviar deben estar en 4
-estudiantes = [[''] * 6 for _ in range(CANT_MAX_ESTUDIANTES)] # A lo sumo 8 estudiantes con email, nombre, contraseña, fecha de nacimiento, biografía y hobbies como datos
-# array de maximo 8 filas por 6 columnas (cada columna es un dato, como se menciona en la linea anterior)
+estudiantes = [[''] * 7 for _ in range(CANT_MAX_ESTUDIANTES)] # A lo sumo 8 estudiantes con email, nombre, contraseña, fecha de nacimiento, biografía, hobbies, id como datos
+# array de maximo 8 filas por 8 columnas (cada columna es un dato, como se menciona en la linea anterior)
+
+# Generador de IDs autoincrementales
+for idx in range(CANT_MAX_ESTUDIANTES):
+    estudiantes[idx][6] = f"{idx + 1:02d}"  # Genera IDs en formato "01", "02", ..., "08"
+# La expresión f"{idx + 1:02d}" asegura que los números sean formateados como cadenas de dos dígitos, es decir, "01" a "08", para mantener consistencia en el formato de los IDs.
 
 moderadoresLen = 1 # cantidad minima de estudiantes para iniciar sesion # al enviar deben estar en 1
 moderadores = [[''] * 3 for _ in range(CANT_MAX_MODERADORES)] # A lo sumo 4 moderadores con email, nombre y contraseña como datos
 # array de maximo 4 filas por 3 columnas (cada columna es un dato, como se menciona en la linea anterior)
+
+likes = [[random.randint(0, 1) for _ in range(8)] for _ in range(CANT_MAX_ESTUDIANTES)] # crea una matriz de 8x8 y la llena aleatoriamente de 0s y 1s
 
 # valor asignado para sesion no iniciada
 currentEstudiante = -1
@@ -169,7 +176,7 @@ def imprimirDatosDeEstudiante(estudiante):
           "Edad: " + obtenerEdad(estudiantes[estudiante][3]) + "\n" +
           "Biografía: " + estudiantes[estudiante][4] + "\n" +
           "Hobbies: " + estudiantes[estudiante][5])
-    
+
 def mostrarPerfil():
     limpiarPantalla()
     print("Estás viendo tu perfil")
@@ -302,7 +309,7 @@ def mostrarGestionarCandidatos():
     limpiarPantalla()
     print("Gestionando candidatos")
     print("a. Ver candidatos disponibles")
-    print("b. Contactar candidatos")
+    print("b. Reportar a un candidato")
     print("c. Volver")
 
 def gestionarCandidatos():
@@ -313,7 +320,7 @@ def gestionarCandidatos():
         if opcion == 'a':
             verCandidatos()
         elif opcion == 'b':
-            enConstruccion()
+            reportar()
         else:
             opcionInvalida()
 
@@ -345,6 +352,8 @@ def menuPrincipal():
         elif opcion == '3':
             enConstruccion()
         elif opcion == '4':
+            estadisticos()
+        elif opcion == '5':
             enConstruccion()
         else:
             opcionInvalida()
@@ -353,12 +362,50 @@ def menuPrincipal():
         opcion = input('Seleccione una opción: ')
 ### Menu principal FIN
 
+### Ver candidatos INICIO
 def verCandidatos():
-    enConstruccion()
+    limpiarPantalla()
+    print("¿Con quién quieres hacer match?")
+
+    candidatos_disponibles = False  # verificar si hay candidatos para mostrar
+
+    for idx, estudiante in enumerate(estudiantes):
+        if estudiante[0] != '':  # Verificar si la fila no está vacía
+            if idx != currentEstudiante:  # Excluir al estudiante actual
+                candidatos_disponibles = True
+                nombre = estudiante[1]
+                email = estudiante[0]
+                fecha_nacimiento = estudiante[3]
+                biografia = estudiante[4]
+                hobbies = estudiante[5]
+
+                print(f"#{idx + 1}")
+                print(f"Nombre: {nombre}")
+                print(f"Email: {email}")
+                print(f"Fecha de Nacimiento: {fecha_nacimiento}")
+                print(f"Edad: {obtenerEdad(fecha_nacimiento)}")
+                print(f"Biografía: {biografia}")
+                print(f"Hobbies: {hobbies}")
+                print("-" * 20)  # Separador entre estudiantes
+
+    if not candidatos_disponibles:
+        print("No hay candidatos disponibles para mostrar.") 
+
+    seleccion = input("Ingresa el número de con quién quieres hacer match: ") #agregar logica de likes, modifican la matriz de likes
+    continuar()
+### Ver candidatos FIN
 
 def mostrarGestionarPerfil():
-    enConstruccion()
+    gestionarPerfil()
 
+def reportar():
+    enConstruccion()
+    continuar()
+
+def estadisticos():
+    enConstruccion()
+    enConstruccion()
+    
 ### sign INICIO ######################################################################
 def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
     global estudiantesLen, estudiantes
@@ -381,7 +428,7 @@ def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
 
     datosEstudiante[1] = input('Introduzca su nombre: ')
     datosEstudiante[2] = input('Introduzca la contraseña: ')
-    datosEstudiante[3] = input('Introduzca su fecha de nacimiento: ') # Añadir validación de fecha de nacimiento
+    datosEstudiante[3] = obtenerFecha()# input('Introduzca su fecha de nacimiento(dd-mm-aaaa): ') # Añadir validación de fecha de nacimiento # probar que funcione
     datosEstudiante[4] = input('Introduzca su biografía: ')
     datosEstudiante[5] = input('Introduzca sus hobbies: ')
 
@@ -467,9 +514,11 @@ def menuInicial():
 ### Menu inicial FIN        
 menuInicial() # EJECUCION
 
+##################################################################################################################################################################
+
 ### Bonus track1 INICIO
 def bonus_track_1():
-    index = 0 # posicion 0 del arreglo
+    index = 0 # posicion 0 del arreglo   datosEstudiante[6] = input("Introduzca su sexo(M o F): ") # Agregar validacion M o F
     edades = [0] * estudiantesLen # se crea una arreglo unidimensional de la cantidad de estudiantes activos
     for est in estudiantes: # se itera por los estudiantes del array ### busca las edades, basicamente ### 
         if est[0] != '': # verifica que el primer elemento no este vacio
