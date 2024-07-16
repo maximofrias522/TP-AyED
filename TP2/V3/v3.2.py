@@ -233,6 +233,19 @@ def mostrarMenuMod():
     print("2. Gestionar reportes")
     print("3. Salir")
 
+def menuMod():
+    mostrarMenuMod()
+    opcion = input('Seleccione una opcion: ')
+
+    while opcion != '3':
+        if opcion == '1':
+            gestionarUsuarios()
+        elif opcion == '2':
+            gestionarReportes()
+        else:
+            opcionInvalida()
+        
+
 # menu MOD sub 1
 def mostrarGestionarUsuarios():
     limpiarPantalla()
@@ -564,8 +577,13 @@ def eliminarPerfil():
 
 ########################################################################################################################################################
 
+def gestionarUsuarios()
+    enConstruccion()
 
 
+
+def gestionarReportes()
+    enConstruccion()
 
 
 
