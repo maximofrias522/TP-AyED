@@ -46,13 +46,16 @@ asciiart = '''
 
 # Generador de datos de prueba
 def generarDatosPrueba():
+    CANT_ESTUDIANTES = random.randint(MIN_ESTUDIANTES, MAX_ESTUDIANTES)
+    CANT_MODERADORES = random.randint(MIN_MODERADORES, MAX_MODERADORES)
+
     nombres_estudiantes = ["Juan", "Ana", "Luis", "Marta", "Pedro", "Lucía", "Carlos", "Sofía"]
     nombres_moderadores = ["Carlos", "Elena", "Raúl", "Gabriela"]
     hobbies_list = ["leer", "viajar", "correr", "dibujar", "nadar"]
     biografia_list = ["Amo la tecnología.", "Me gusta la lectura.", "Apasionado por los deportes.", "Artista en mi tiempo libre.", "Explorador del mundo."]
 
     # Generar datos para estudiantes
-    for i in range(MAX_ESTUDIANTES):
+    for i in range(CANT_ESTUDIANTES):
         estudiantes[i][1] = f"estudiante{i}@ayed.com"  # Email
         estudiantes[i][2] = f"pass{i}"  # Contraseña
         estudiantes[i][3] = "ACTIVO" if i < 4 else "INACTIVO"  # Estado
@@ -62,7 +65,7 @@ def generarDatosPrueba():
         estudiantes[i][7] = random.choice(biografia_list)  # Biografía
 
     # Generar datos para moderadores
-    for i in range(MAX_MODERADORES):
+    for i in range(CANT_MODERADORES):
         moderadores[i][0] = f"moderador{i}@ayed.com"  # Email
         moderadores[i][1] = f"pass{i}"  # Contraseña
         moderadores[i][2] = random.choice(nombres_moderadores)  # Nombre
@@ -130,13 +133,20 @@ def iniciarSesion():
     email = input('Introduzca su email: ')
     estudiante = buscarEstudiante(email)
     moderador = buscarModerador(email)
-
+    
     while estudiante == -1 and moderador == -1:
         print('Usuario no encontrado, intente nuevamente: ')
         email = input('Introduzca su email: ')
         estudiante = buscarEstudiante(email)
         if estudiante == -1:
             moderador = buscarModerador(email)
+
+    if estudiante != -1:
+        if estudiantes[estudiante][3] == 'INACTIVO':
+            print("Tu cuenta de estudiante ha sido inhabilitada. Para más información, contáctate con los administradores.")
+            continuar()
+            menuInicial()
+            return False, None  # No se puede iniciar sesión si la cuenta está inactiva
 
     if estudiante != -1 and moderador != -1:
         aux = input('Está registrado como estudiante y moderador, presione 0 si desea iniciar como estudiante o 1 si desea iniciar sesión como moderador: ')
@@ -154,6 +164,7 @@ def iniciarSesion():
             return True, "estudiante"
         else:
             return False, None
+  
     else:
         if validarContrasenaModerador(moderador):
             return True, "moderador"
@@ -168,7 +179,7 @@ def utnMatch():
         continuar() # usa la funcion continuar
         return # no devuelve nada, terrible ortiva
     
-    sesion_iniciada, tipo_usuario = iniciarSesion() # la asigna el valor de salida true or false de iniciarSesion
+    sesion_iniciada, tipo_usuario = iniciarSesion() # la asigna el valor de salida bool de iniciarSesion
     if not sesion_iniciada: # Si no se inició sesión exitosamente imprime el error y finaliza el programa
         print('Se introdujo una contraseña incorrecta 3 veces y finalizó el programa.')
         continuar()
@@ -321,7 +332,6 @@ def editarDatosPersonales(): # logica del menu
 #                 seguir = False
 #         print('Sus datos han sido eliminados correctamente')
 
-# def deshabilitarPerfil():
     
 
 ### eliminar perfil fin
@@ -345,7 +355,8 @@ def gestionarPerfil():
         elif opcion == 'b':
             mostrarPerfil()  
         elif opcion == 'c':
-            eliminarPerfil(id)
+            enConstruccion()
+            # eliminarPerfil()
         else:
             opcionInvalida()
 
@@ -387,7 +398,7 @@ def mostrarMenuPrincipal():
     print("3. Matcheos")
     print("4. Reportes estadísticos")
     print("5. Ruleta")
-    print("0. Salir del programa")
+    print("0. Salir")
 
 def menuPrincipal():
     mostrarMenuPrincipal()
@@ -420,8 +431,8 @@ def verCandidatos():
 
     for idx, estudiante in enumerate(estudiantes):
         if estudiante[0] != '':  # Verificar si la fila no está vacía
-            if estudiante[3] != 'ACTIVO':
-                if idx != currentEstudiante:  # Excluir al estudiante actual
+            if estudiante[3] == 'ACTIVO' and idx != currentEstudiante:  # Excluir al estudiante actual y sólo mostrar activos
+                if estudiante[1] and estudiante[5]:  # Verificar si el email y la fecha de nacimiento no están vacíos
                     candidatos_disponibles = True
                     nombre = estudiante[4]
                     email = estudiante[1]
@@ -440,9 +451,10 @@ def verCandidatos():
                     print("-" * 20)  # Separador entre estudiantes
 
     if not candidatos_disponibles:
-        print("No hay candidatos disponibles para mostrar.") 
+        print("No hay candidatos disponibles para mostrar.")
 
-    seleccion = input("Ingresa el ID de con quién quieres hacer match: ") #agregar logica de likes, modifican la matriz de likes
+    seleccion = input("Ingresa el ID de con quién quieres hacer match: ")  # Agregar lógica de likes, modificar la matriz de likes
+    print("Solicitud de match enviada!")
     continuar()
 ### Ver candidatos FIN
 
@@ -481,7 +493,7 @@ def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
     index = buscarEstudiante('')
 
     estudiantes[index] = datosEstudiante
-    estudiantesLen += 1
+    MIN_ESTUDIANTES += 1
 
     print('El estudiante se registró exitosamente.')
     continuar()  
@@ -560,30 +572,35 @@ def menuInicial():
         mostrarMenuInicial()
         opcion = input('Seleccione una opción: ')
 ### Menu inicial FIN        
-menuInicial() # EJECUCION
 
 ################# modder    
 
 # menu MOD 
 def mostrarMenuMod():
     limpiarPantalla()
-    print("Bienvenido, ", moderadores[currentModerador][1])
-    print("Menu Principal:")
+    print("Bienvenido, ", moderadores[currentModerador][2])
+    print("Menu de Moderador:")
     print("1. Gestionar usuarios")
     print("2. Gestionar reportes")
-    print("3. Salir")
+    print("3. Reportes estadisticos")
+    print("0. Salir")
 
 def menuMod():
     mostrarMenuMod()
     opcion = input('Seleccione una opcion: ')
 
-    while opcion != '3':
+    while opcion != '0':
         if opcion == '1':
             gestionarUsuarios()
         elif opcion == '2':
             gestionarReportes()
+        elif opcion == '3':
+            enConstruccion()
         else:
             opcionInvalida()
+
+        mostrarMenuMod()
+        opcion = input('Seleccione una opcion: ')
 
 # menu MOD sub 1
 def mostrarGestionarUsuarios():
@@ -599,20 +616,77 @@ def mostrarGestionReportes():
     print("a. Ver reportes") 
     print("b. Volver")
 
+def gestionarReportes():
+    mostrarGestionReportes()
+    opcion = input("Seleccione una opcion: ")
+
+    while opcion != 'b':
+        if opcion == 'a':
+            verReportes()
+        else:
+            opcionInvalida()
+        
+        mostrarGestionReportes()
+        opcion = input("Seleccione una opcion: ")
+
 # menu MOD sub 2 sub a
 def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes para visualizar bien la matriz
-    limpiarPantalla()
     enConstruccion()
-    continuar()
+
+def mostrarGestionarUsuarios():
+    limpiarPantalla()
+    print("Gestionando usuarios")
+    print("a. Desactivar usuario")
+    print("b. Volver")
 
 def gestionarUsuarios():
-    enConstruccion()
+    mostrarGestionarUsuarios()
+    opcion = input("Seleccione una opcion: ")
 
+    while opcion != 'b':
+        if opcion == 'a':
+            desactivarUsuario()
+        else:
+            opcionInvalida()
+        
+        mostrarGestionarUsuarios()
+        opcion = input("Seleccione una opcion: ")
 
-def gestionarReportes():
-    enConstruccion()
+def desactivarUsuario():
+    limpiarPantalla()
+    print("Menu de desactivacion")
 
+    nuevo_estado = "INACTIVO"
 
+    valid = input("Ingresa [si] para continuar o presiona [ENTER] para volver: ")
+    if valid == 'si': 
+        idp = input("Ingresa el ID del usuario a desactivar: ")
+        
+        # Validación del formato
+        if len(idp) == 2 and idp.isdigit() and int(idp) >= 1 and int(idp) <= MAX_ESTUDIANTES:
+            for idx, estudiante in enumerate(estudiantes):
+                if estudiante[0] == idp:
+                    print("Datos usuario: ")
+                    print("Email: " + estudiante[1])
+                    print("Nombre: " + estudiante[4])
+                    print("¿Es el usuario a desactivar?")
+                    validar = input("Ingresa [si] para continuar o presiona [ENTER] para volver: ")
+                    if validar == 'si':
+                        print(f"Desactivando usuario con ID {idp}")
+                        estudiante[3] = nuevo_estado
+                        # print(estudiante[3])
+                        continuar()
+                    else:
+                        gestionarUsuarios()
+        else:
+            print("El ID ingresado no es válido o no existe.")
+            continuar()
+            gestionarUsuarios()  
+            
+    else:
+        gestionarUsuarios()
+
+menuInicial() # EJECUCION
 ##################################################################################################################################################################
 
 ### Bonus track1 INICIO
