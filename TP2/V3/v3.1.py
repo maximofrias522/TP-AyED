@@ -21,7 +21,14 @@ for idx in range(MAX_ESTUDIANTES):
     estudiantes[idx][0] = f"{idx + 1:02d}"  # Genera IDs en formato "01", "02", ..., "08"
 # La expresión f"{idx + 1:02d}" asegura que los números sean formateados como cadenas de dos dígitos, es decir, "01" a "08", para mantener consistencia en el formato de los IDs.
 
-likes = [[random.randint(0, 1) for _ in range(8)] for _ in range(MAX_ESTUDIANTES)] # crea una matriz de 8x8 y la llena aleatoriamente de 0s y 1s
+likes = [[random.choice(['0', '1']) for _ in range(MAX_ESTUDIANTES)] for _ in range(MAX_ESTUDIANTES)] # crea una matriz de 8x8 y la llena aleatoriamente de 0s y 1s
+# likes = [['0']*8 for _ in range(MAX_ESTUDIANTES)] # esto era para test vacio
+
+def imprimirLikes(likes):
+    for fila in likes:
+        print(fila)
+
+
 
 reportes = [[''] * 3 for _ in range(8)] # matriz de 3x8, id del reportado, motivo, estado del reporte (0,1,2)
 
@@ -412,7 +419,7 @@ def menuPrincipal():
         elif opcion == '3':
             enConstruccion()
         elif opcion == '4':
-            estadisticos()
+            mostrarEstadisticos()
         elif opcion == '5':
             enConstruccion()
         else:
@@ -425,9 +432,13 @@ def menuPrincipal():
 ### Ver candidatos INICIO
 def verCandidatos():
     limpiarPantalla()
+
+    #imprimirLikes(likes)
     print("¿Con quién quieres hacer match?")
 
     candidatos_disponibles = False  # verificar si hay candidatos para mostrar
+    ids = [''] * MAX_ESTUDIANTES  
+    index = 0
 
     for idx, estudiante in enumerate(estudiantes):
         if estudiante[0] != '':  # Verificar si la fila no está vacía
@@ -450,19 +461,133 @@ def verCandidatos():
                     print(f"Hobbies: {hobbies}")
                     print("-" * 20)  # Separador entre estudiantes
 
+                    ids[index] = idl
+                    index += 1
+
     if not candidatos_disponibles:
         print("No hay candidatos disponibles para mostrar.")
 
     seleccion = input("Ingresa el ID de con quién quieres hacer match: ")  # Agregar lógica de likes, modificar la matriz de likes
-    print("Solicitud de match enviada!")
-    continuar()
+    if len(seleccion) == 2 and int(seleccion) >= 1 and int(seleccion) <= MAX_ESTUDIANTES:
+        for idx, estudiante in enumerate(estudiantes):
+            if estudiante[0] == seleccion:
+                print("Solicitud enviada a " + estudiante[4])
+                likes[currentEstudiante][idx] = '1'
+
+                # imprimirLikes(likes)
+                continuar()
+                menuPrincipal()
+        else:
+            print("Estudiante no encontrado")
+            continuar()
+            menuPrincipal()
+
+    # print("Solicitud de match enviada!")
+    # continuar()
 ### Ver candidatos FIN
 
 def reportar():
-    enConstruccion()
+    limpiarPantalla()
+    print("Menu de reportes:")
+    estado_nuevo_reporte = "0"
 
-def estadisticos():
-    enConstruccion()
+    valid = input("Ingresa [si] para continuar o presiona [ENTER] para volver: ")
+    if valid == 'si': 
+        idp = input("Ingresa el ID del usuario a reportar: ")
+        # Validación del formato
+        if len(idp) == 2 and int(idp) >= 1 and int(idp) <= MAX_ESTUDIANTES:
+            for idx, estudiante in enumerate(estudiantes):
+                if estudiante[0] == idp:
+                    print("Datos usuario: ")
+                    print("Email: " + estudiante[1])
+                    print("Nombre: " + estudiante[4])
+                    print("¿Es el usuario a reportar?")
+                    validar = input("Ingresa [si] para continuar o presiona [ENTER] para volver: ")
+                    if validar == 'si':
+                        motivo = input("¿Porque quiere reportar a este usuario? Escriba su respuesta: ")
+                        print(f"Reportando usuario con ID {idp}")
+
+                        # Guardar el reporte en la matriz reportes
+                        for i in range(len(reportes)):
+                            if reportes[i][0] == '':  # Buscar la primera fila vacía
+                                reportes[i][0] = idp
+                                reportes[i][1] = motivo
+                                reportes[i][2] = '0'  # Estado inicial del reporte
+                                print("Reporte guardado exitosamente")
+                                continuar()
+                                return
+
+                    else:
+                        gestionarCandidatos()
+        else:
+            print("El ID ingresado no es válido o no existe.")
+            continuar()
+            gestionarCandidatos()  
+            
+    else:
+        gestionarCandidatos()
+
+def mostrarEstadisticos():
+    limpiarPantalla()
+    print("Estadisticas:")
+    
+    # Calcular el porcentaje de likes dados y recibidos
+    porcentaje_likes = estadisticos1()  # Asumiendo que calcularPorcentajeLikes() devuelve el porcentaje como un número
+    print(f"Porcentaje de likes dados y recibidos es: {porcentaje_likes:.2f}%")
+    
+    # Calcular la cantidad de likes no respondidos por otros usuarios y por nosotros
+    likes_no_respondidos_por_otros, likes_no_respondidos_por_nosotros = calcularLikesNoRespondidos()
+    print(f"Cantidad de likes no respondidos por otros: {likes_no_respondidos_por_otros}")
+    print(f"Cantidad de likes que no hemos respondido nosotros: {likes_no_respondidos_por_nosotros}")
+    
+    continuar()
+    menuPrincipal()
+
+
+def estadisticos1():
+    likes_dados = 0
+    likes_recibidos = 0
+    total_likes_dados = 0
+    total_likes_recibidos = 0
+    
+    # Obtener el índice del usuario logeado (supongamos que es currentEstudiante)
+    idx_usuario_logeado = currentEstudiante
+    
+    # Iterar sobre la matriz de likes
+    for idx, likes_persona in enumerate(likes):
+        if idx != idx_usuario_logeado:  # Excluir al usuario logeado
+            if likes_persona[idx_usuario_logeado] == '1':  # Verificar si el usuario logeado dio like a esta persona
+                likes_dados += 1
+            if likes[idx_usuario_logeado] == '1':  # Verificar si esta persona dio like al usuario logeado
+                likes_recibidos += 1
+            total_likes_dados += sum(int(likes[idx]) for idx, likes in enumerate(likes_persona) if idx != idx_usuario_logeado)  # Sumar todos los likes dados a esta persona
+    
+    # Calcular el porcentaje
+    if likes_dados > 0:
+        porcentaje = (likes_recibidos / likes_dados) * 100
+    else:
+        porcentaje = 0
+    
+    return porcentaje
+
+def calcularLikesNoRespondidos():
+    likes_no_respondidos_por_otros = 0
+    likes_no_respondidos_por_nosotros = 0
+    
+    # Obtener el índice del usuario logeado (supongamos que es currentEstudiante)
+    idx_usuario_logeado = currentEstudiante
+    
+    # Iterar sobre la matriz de likes
+    for idx, likes_persona in enumerate(likes):
+        if idx != idx_usuario_logeado:  # Excluir al usuario logeado
+            if likes_persona[idx_usuario_logeado] == '0':  # Verificar si esta persona no dio like al usuario logeado
+                likes_no_respondidos_por_otros += 1
+            if likes[idx] == '0':  # Verificar si el usuario logeado no dio like a esta persona
+                likes_no_respondidos_por_nosotros += 1
+    
+    return likes_no_respondidos_por_otros, likes_no_respondidos_por_nosotros
+
+
     
 ### sign INICIO ######################################################################
 def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
@@ -631,7 +756,53 @@ def gestionarReportes():
 
 # menu MOD sub 2 sub a
 def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes para visualizar bien la matriz
-    enConstruccion()
+    limpiarPantalla()
+    print("Reportes registrados:")
+    
+    # Encabezados de la tabla
+    print(f"{'Número':<10} {'ID Reportado':<15} {'Motivo':<60} {'Estado':<10}")
+    print("=" * 100)  # Línea divisoria
+    
+    num = 1
+    # Mostrar cada reporte en la tabla
+    for idx, reporte in enumerate(reportes):
+        if reporte[0] != '':  # Verificar si la fila no está vacía
+            id_reportado = reporte[0]
+            motivo = reporte[1]
+            estado = reporte[2]
+            print(f"{num:<10} {id_reportado:<15} {motivo:<60} {estado:<10}")
+            num += 1
+    
+    print("=" * 100)  # Línea divisoria
+
+    # Solicitar al usuario seleccionar un reporte por su ID
+    seleccion = input("Ingrese el numero de reporte que desea modificar el estado o [ENTER] para volver: ")
+    
+    if int(seleccion) >= 1 and int(seleccion) <= MAX_ESTUDIANTES:
+        seleccion = int(seleccion) - 1  # Convertir a índice de lista
+        if 0 <= seleccion < len(reportes):
+            id_reporte = reportes[seleccion][0]
+            nuevo_estado = input(f"Ingrese el nuevo estado para el reporte ID:{id_reporte}: ")
+            if nuevo_estado == '1':
+                reportes[seleccion][2] = "1"
+            elif nuevo_estado == "2":
+                reportes[seleccion][2] = "2"
+            else:
+                print("Formato incorrecto")
+                continuar()
+                gestionarReportes()
+
+            print(f"Estado del reporte {id_reporte} actualizado exitosamente.")
+            continuar()
+            gestionarReportes()
+        elif seleccion == "":
+            gestionarReportes()  
+        else:
+            print("Número de reporte inválido.")
+    else:
+        continuar()
+    
+    gestionarReportes()
 
 def mostrarGestionarUsuarios():
     limpiarPantalla()
@@ -663,7 +834,7 @@ def desactivarUsuario():
         idp = input("Ingresa el ID del usuario a desactivar: ")
         
         # Validación del formato
-        if len(idp) == 2 and idp.isdigit() and int(idp) >= 1 and int(idp) <= MAX_ESTUDIANTES:
+        if len(idp) == 2 and int(idp) >= 1 and int(idp) <= MAX_ESTUDIANTES:
             for idx, estudiante in enumerate(estudiantes):
                 if estudiante[0] == idp:
                     print("Datos usuario: ")
