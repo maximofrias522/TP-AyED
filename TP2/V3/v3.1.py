@@ -530,66 +530,30 @@ def reportar():
         # menuPrincipal()
 
 def mostrarEstadisticos():
+    estadisticos1()
+    # estadisticos2()
+    # estadisticos3()
+
     limpiarPantalla()
     print("Estadisticas:")
-    
-    # Calcular el porcentaje de likes dados y recibidos
-    porcentaje_likes = estadisticos1()  # Asumiendo que calcularPorcentajeLikes() devuelve el porcentaje como un número
-    print(f"Porcentaje de likes dados y recibidos es: {porcentaje_likes:.2f}%")
-    
-    # Calcular la cantidad de likes no respondidos por otros usuarios y por nosotros
-    likes_no_respondidos_por_otros, likes_no_respondidos_por_nosotros = calcularLikesNoRespondidos()
-    print(f"Cantidad de likes no respondidos por otros: {likes_no_respondidos_por_otros}")
-    print(f"Cantidad de likes que no hemos respondido nosotros: {likes_no_respondidos_por_nosotros}")
-    
     continuar()
     menuPrincipal()
 
-
+# likes que no respondimos (loged user)
 def estadisticos1():
-    likes_dados = 0
-    likes_recibidos = 0
-    total_likes_dados = 0
-    total_likes_recibidos = 0
-    
-    # Obtener el índice del usuario logeado (supongamos que es currentEstudiante)
-    idx_usuario_logeado = currentEstudiante
-    
-    # Iterar sobre la matriz de likes
-    for idx, likes_persona in enumerate(likes):
-        if idx != idx_usuario_logeado:  # Excluir al usuario logeado
-            if likes_persona[idx_usuario_logeado] == '1':  # Verificar si el usuario logeado dio like a esta persona
-                likes_dados += 1
-            if likes[idx_usuario_logeado] == '1':  # Verificar si esta persona dio like al usuario logeado
-                likes_recibidos += 1
-            total_likes_dados += sum(int(likes[idx]) for idx, likes in enumerate(likes_persona) if idx != idx_usuario_logeado)  # Sumar todos los likes dados a esta persona
-    
-    # Calcular el porcentaje
-    if likes_dados > 0:
-        porcentaje = (likes_recibidos / likes_dados) * 100
-    else:
-        porcentaje = 0
-    
-    return porcentaje
-
-def calcularLikesNoRespondidos():
-    likes_no_respondidos_por_otros = 0
-    likes_no_respondidos_por_nosotros = 0
-    
-    # Obtener el índice del usuario logeado (supongamos que es currentEstudiante)
-    idx_usuario_logeado = currentEstudiante
-    
-    # Iterar sobre la matriz de likes
-    for idx, likes_persona in enumerate(likes):
-        if idx != idx_usuario_logeado:  # Excluir al usuario logeado
-            if likes_persona[idx_usuario_logeado] == '0':  # Verificar si esta persona no dio like al usuario logeado
-                likes_no_respondidos_por_otros += 1
-            if likes[idx] == '0':  # Verificar si el usuario logeado no dio like a esta persona
-                likes_no_respondidos_por_nosotros += 1
-    
-    return likes_no_respondidos_por_otros, likes_no_respondidos_por_nosotros
+    for i in range (len(estudiantes)):
+        if i == currentEstudiante:
+            continue
+    print(f"indice = {i}")
 
 
+# Likes que no respondieron otros (signed users not loged one)
+def estadisticos2():
+    enConstruccion()
+
+# % de likes dobles (no contar columna loged user)
+def estadisticos3():
+    enConstruccion()
     
 ### sign INICIO ######################################################################
 def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
