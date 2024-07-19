@@ -51,7 +51,7 @@ asciiart = '''
 
 ### Cartel
 
-# Generador de datos de prueba
+# Generador de datos de prueba 
 def generarDatosPrueba():
     CANT_ESTUDIANTES = random.randint(MIN_ESTUDIANTES, MAX_ESTUDIANTES)
     CANT_MODERADORES = random.randint(MIN_MODERADORES, MAX_MODERADORES)
@@ -518,14 +518,16 @@ def reportar():
                                 return
 
                     else:
-                        gestionarCandidatos()
+                        return
+                        # menuPrincipal()
         else:
             print("El ID ingresado no es válido o no existe.")
             continuar()
-            gestionarCandidatos()  
+            menuPrincipal()  
             
     else:
-        gestionarCandidatos()
+        return()
+        # menuPrincipal()
 
 def mostrarEstadisticos():
     limpiarPantalla()
@@ -776,9 +778,9 @@ def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes 
     print("=" * 100)  # Línea divisoria
 
     # Solicitar al usuario seleccionar un reporte por su ID
-    seleccion = input("Ingrese el numero de reporte que desea modificar el estado o [ENTER] para volver: ")
+    seleccion = input("Ingrese el numero de reporte que desea modificar el estado o [0] para volver: ")
     
-    if int(seleccion) >= 1 and int(seleccion) <= MAX_ESTUDIANTES:
+    if int(seleccion) >= 0 and int(seleccion) <= MAX_ESTUDIANTES:
         seleccion = int(seleccion) - 1  # Convertir a índice de lista
         if 0 <= seleccion < len(reportes):
             id_reporte = reportes[seleccion][0]
@@ -795,10 +797,12 @@ def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes 
             print(f"Estado del reporte {id_reporte} actualizado exitosamente.")
             continuar()
             gestionarReportes()
-        elif seleccion == "":
-            gestionarReportes()  
         else:
             print("Número de reporte inválido.")
+    elif seleccion == 0:
+        print("Volver")
+        continuar()
+        gestionarReportes()
     else:
         continuar()
     
