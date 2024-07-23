@@ -322,24 +322,20 @@ def editarDatosPersonales(): # logica del menu
 ### menu editar datos personales FIN
 
 ### Eliminar perfil INICIO
-# def eliminarPerfil():
-#     opcion = input('Presione 1 si está seguro de que desea eliminar su perfil o 0 para volver: ')
-#     while opcion != '0' and opcion != '1': 
-#         opcionInvalida()
-#         opcion = input('Presione 1 si está seguro de que desea eliminar su perfil o 0 para volver: ')
+def eliminarPerfil():
+    limpiarPantalla()
+    print("¿Estas seguro que deseas eliminar tu perfil? Esta accion no tiene vuelta atras!")
 
-#     if opcion == 1: # si la opcion es 1, se recorre el array en la fila currentEstudiante y se borra todo 
-#         i = 0 
-#         seguir = True
-#         while seguir:
-#             try:
-#                 estudiantes[currentEstudiante][i] = ['']
-#                 i += 1
-#             except IndexError: 
-#                 seguir = False
-#         print('Sus datos han sido eliminados correctamente')
+    nuevo_estado = "INACTIVO"
 
-    
+    valid = input("Ingresa [si] para continuar o presiona [ENTER] para volver: ")
+    if valid == 'si':
+        estudiantes[currentEstudiante][3] = "INACTIVO"
+        print("Su usuario ha sido deshabilitado, gracias por usar nuestro sistema!")
+        continuar()
+        menuInicial()
+    else: 
+        gestionarPerfil()
 
 ### eliminar perfil fin
 
@@ -362,8 +358,7 @@ def gestionarPerfil():
         elif opcion == 'b':
             mostrarPerfil()  
         elif opcion == 'c':
-            enConstruccion()
-            # eliminarPerfil()
+            eliminarPerfil()
         else:
             opcionInvalida()
 
