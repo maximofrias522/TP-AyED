@@ -21,7 +21,7 @@ for idx in range(MAX_ESTUDIANTES):
     estudiantes[idx][0] = f"{idx + 1:02d}"  # Genera IDs en formato "01", "02", ..., "08"
 # La expresión f"{idx + 1:02d}" asegura que los números sean formateados como cadenas de dos dígitos, es decir, "01" a "08", para mantener consistencia en el formato de los IDs.
 
-likes = [[random.choice(['0', '1']) for _ in range(MAX_ESTUDIANTES)] for _ in range(MAX_ESTUDIANTES)] # crea una matriz de 8x8 y la llena aleatoriamente de 0s y 1s
+likes = [[random.choice(['0', '1']) for _ in range(MAX_ESTUDIANTES)] for _ in range(MAX_ESTUDIANTES)] # crea una matriz de 8x8 y la llena aleatoriamente de 0s y 1s // row = recibidos y column = dados
 # likes = [['0']*8 for _ in range(MAX_ESTUDIANTES)] # esto era para test vacio
 
 def imprimirLikes(likes):
@@ -536,11 +536,7 @@ def mostrarEstadisticos():
 
 # likes que no respondimos (loged user)
 def estadisticos1():
-    for i in range (len(estudiantes)):
-        if i == currentEstudiante:
-            continue
-    print(f"indice = {i}")
-
+    enConstruccion()
 
 # Likes que no respondieron otros (signed users not loged one)
 def estadisticos2():
