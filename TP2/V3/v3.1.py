@@ -1,4 +1,4 @@
-
+### COMENTARIO PARA PROFESORA ### Debajo del cartel hay una funcion para autogenerar usuarios, si usted quiere probar el ingreso de datos y la validacion de cantidad de usuarios
 # importar librerias 
 import os 
 import random  
@@ -525,26 +525,75 @@ def reportar():
         # menuPrincipal()
 
 def mostrarEstadisticos():
-    estadisticos1()
-    # estadisticos2()
-    # estadisticos3()
-
+    likes_no_respondidos_por_nos = likesNoRespondidosPorNos(likes, currentEstudiante)
+    likes_no_respondidos_por_otros = likesQueNoNosRespondieron(likes, currentEstudiante)
+    porcentaje_likes_dobles = likesDobles(likes)
     limpiarPantalla()
     print("Estadisticas:")
+    print(f"\nUsuario {estudiantes[currentEstudiante][4]} no respondio likes a: {likes_no_respondidos_por_nos} usuarios")
+    print(f"\nAl usuario {estudiantes[currentEstudiante][4]} no le respondieron el like: {likes_no_respondidos_por_otros} usuarios")
+    print(f'\nPorcentaje de likes dobles respecto al total de likes: {porcentaje_likes_dobles:.2f}%')
+
     continuar()
     menuPrincipal()
 
-# likes que no respondimos (loged user)
-def estadisticos1():
-    enConstruccion()
+# likes recibidos y no respondidos por nos
+def likesNoRespondidosPorNos(likes, currentEstudiante):
+    likes_no_respondidos_por_nos = 0
+    
+    for i in range(MAX_ESTUDIANTES):
+        if i != currentEstudiante:  # Excluir a currentEstudiante
+            if likes[i][currentEstudiante] == '0' and likes[currentEstudiante][i] == '1':
+                likes_no_respondidos_por_nos += 1
+            else:
+                continue     
 
-# Likes que no respondieron otros (signed users not loged one)
-def estadisticos2():
-    enConstruccion()
+    return likes_no_respondidos_por_nos
 
-# % de likes dobles (no contar columna loged user)
-def estadisticos3():
-    enConstruccion()
+# likes dados y no recibidos
+def likesQueNoNosRespondieron(likes, currentEstudiante):
+    likes_no_respondidos_por_otros = 0
+    likes_totales = 0
+
+    for i in range(MAX_ESTUDIANTES):
+        for j in range(MAX_ESTUDIANTES):
+            if likes [j][i] == 1:
+                likes_totales += 1
+            else:
+                continue
+
+
+    for i in range(MAX_ESTUDIANTES):
+        if i != currentEstudiante:  # Excluir a currentEstudiante
+            if likes[i][currentEstudiante] == '1' and likes[currentEstudiante][i] == '0':
+                likes_no_respondidos_por_otros += 1
+            else:
+                continue
+
+    return likes_no_respondidos_por_otros
+
+def likesDobles(likes):
+    likes_dobles = 0
+    likes_totales = 0
+
+    # Contar el total de likes en la matriz
+    for i in range(MAX_ESTUDIANTES):
+        for j in range(MAX_ESTUDIANTES):
+            if likes[j][i] == '1':
+                likes_totales += 1
+    
+    # Contar la cantidad de likes dobles
+    for i in range(MAX_ESTUDIANTES):
+        for j in range(MAX_ESTUDIANTES):
+            if likes[i][j] == '1' and likes[j][i] == '1':
+                likes_dobles += 1
+
+    # Calcular el porcentaje de likes dobles
+    if likes_totales == 0:
+        return 0  # Evitar división por cero
+
+    porcentaje_likes_dobles = (likes_dobles / likes_totales) * 100
+    return porcentaje_likes_dobles
     
 ### sign INICIO ######################################################################
 def registrarEstudiante(): # MODULARIZAR ESTA FUNCIÓN
