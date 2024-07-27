@@ -1,3 +1,4 @@
+### Detalles de integrantes y del tp en general en este repositorio https://github.com/maximofrias522/TP-AyED
 ### COMENTARIO PARA PROFESORA ### Debajo del cartel hay una funcion para autogenerar usuarios, si usted quiere probar el ingreso de datos y la validacion de cantidad de usuarios
 # importar librerias 
 import os 
