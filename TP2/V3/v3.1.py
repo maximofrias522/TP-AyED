@@ -792,7 +792,7 @@ def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes 
         seleccion = int(seleccion) - 1  # Convertir a índice de lista
         if 0 <= seleccion < len(reportes):
             id_reporte = reportes[seleccion][0]
-            nuevo_estado = input(f"Ingrese el nuevo estado para el reporte ID:{id_reporte}: ")
+            nuevo_estado = input(f"Ingrese el nuevo estado para el reporte ID (1 o 2):{id_reporte}: ")
             if nuevo_estado == '1':
                 reportes[seleccion][2] = "1"
             elif nuevo_estado == "2":
