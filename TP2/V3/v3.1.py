@@ -472,11 +472,13 @@ def verCandidatos():
 
                 # imprimirLikes(likes)
                 continuar()
-                menuPrincipal()
+                return
+                # menuPrincipal()
         else:
             print("Estudiante no encontrado")
             continuar()
-            menuPrincipal()
+            # menuPrincipal()
+            return
 
     # print("Solicitud de match enviada!")
     # continuar()
@@ -519,10 +521,11 @@ def reportar():
         else:
             print("El ID ingresado no es válido o no existe.")
             continuar()
-            menuPrincipal()  
+            return
+            # menuPrincipal()  
             
     else:
-        return()
+        return
         # menuPrincipal()
 
 def mostrarEstadisticos():
@@ -797,21 +800,25 @@ def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes 
             else:
                 print("Formato incorrecto")
                 continuar()
-                gestionarReportes()
+                return
+                # gestionarReportes()
 
             print(f"Estado del reporte {id_reporte} actualizado exitosamente.")
             continuar()
-            gestionarReportes()
+            return
+            # gestionarReportes()
         else:
             print("Número de reporte inválido.")
     elif seleccion == 0:
         print("Volver")
         continuar()
-        gestionarReportes()
+        return
+        # gestionarReportes()
     else:
         continuar()
+        return
     
-    gestionarReportes()
+    # gestionarReportes()
 
 def mostrarGestionarUsuarios():
     limpiarPantalla()
@@ -857,14 +864,17 @@ def desactivarUsuario():
                         # print(estudiante[3])
                         continuar()
                     else:
-                        gestionarUsuarios()
+                        return
+                        # gestionarUsuarios()
         else:
             print("El ID ingresado no es válido o no existe.")
             continuar()
-            gestionarUsuarios()  
+            return
+            # gestionarUsuarios()  
             
     else:
-        gestionarUsuarios()
+        return
+        # gestionarUsuarios()
 
 menuInicial() # EJECUCION
 ##################################################################################################################################################################
