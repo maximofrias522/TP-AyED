@@ -336,7 +336,8 @@ def eliminarPerfil():
         continuar()
         menuInicial()
     else: 
-        gestionarPerfil()
+        # gestionarPerfil()
+        return
 
 ### eliminar perfil fin
 
