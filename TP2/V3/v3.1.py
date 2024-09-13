@@ -180,12 +180,59 @@ def iniciarSesion():
             return False, None
 ### Validar inicio de sesion FIN 
 
+##################################################################################################################################################################
+
+### Bonus track1 INICIO
+def bonus_track_1():
+    index = 0 # posicion 0 del arreglo   datosEstudiante[6] = input("Introduzca su sexo(M o F): ") # Agregar validacion M o F
+    edades = [0] * MAX_ESTUDIANTES # se crea una arreglo unidimensional de la cantidad de estudiantes máxima
+    for est in estudiantes: # se itera por los estudiantes del array ### busca las edades, basicamente ### 
+        if est[5] != '' and est[3] != 'INACTIVO': # verifica que el primer elemento no este vacio
+            edades[index] = int(obtenerEdad(est[5])) # si se cumple el if, se llama a la funcion obtenerEdad con el cuarto elemento de est como argumento
+            index += 1 # el index se aumenta en 1 para que la proxima iteracion sea en el siguente elemento 
+
+    for i in range(index - 1):
+        for j in range(0, index-i-1):
+            if edades[j] > edades[j+1]: # se verifica que el argumento actual sea mayor que el siguiente
+                aux = edades[j+1] # Guardar el valor de edades[j+1]
+                edades[j+1] = edades[j] # Mover edades[j] a la posición j+1
+                edades[j] = aux # coloca el valor original de edades[j+1] en la posicion j
+# Al final de cada pasada, el elemento más grande de la sección no ordenada se mueve a su posición final.
+
+    for i in range(index): # se itera desde 0 hasta MIN_ESTUDIANTES-1
+        if edades[i] + 1 != edades[i + 1]: # se verifica que los elementos consecutivos no sean numeros consecutivos  
+            print(f'Existe un hueco entre {edades[i]} y {edades[i+1]}')  
+
+    continuar()
+### Bonus track1 FIN
+
+### Bonus track2 INICIO
+def bonus_track_2(): # lógica: el primer estudiante puede matchear con lenEstudiantes -1  estudiantes (todos menos él mismo),
+                     # el segundo también tiene lenEstudiantes -1 matcheos disponibles pero no se cuenta el matcheo que se
+                     # registró con el primer estudiante, se puede probar que la secuencia es
+                     # e_n = lenEstudiantes - n, lenEstudiantes >= n >= 1
+    lenEstudiantes = 0
+    for i in range(MAX_ESTUDIANTES):
+        if estudiantes[i][3] == 'ACTIVO':
+            lenEstudiantes += 1
+
+    acum = 0
+    for i in range(lenEstudiantes):
+        acum += lenEstudiantes - i # se suma lenEstudiantes - i en cada iteracion, se resta el iterador para que no
+                                   # cuente matcheos anteriores 
+
+    print(f'Hay {acum} matcheos posibles')
+    continuar()
+### Bonus track2 FIN
+
+##################################################################################################################################################################
+
 ### Validacion de condiciones para log INICIO
 def utnMatch():
     if MIN_ESTUDIANTES < 4 or MIN_MODERADORES < 1: # si los estudiantes registrados son menos de 4 y los moderadores son menos de 1
         print('El inicio de sesión no está disponible.') # no se puede iniciar sesion
         continuar() # usa la funcion continuar
-        return # no devuelve nada, terrible ortiva
+        return # no devuelve nada
     
     sesion_iniciada, tipo_usuario = iniciarSesion() # la asigna el valor de salida bool de iniciarSesion
     if not sesion_iniciada: # Si no se inició sesión exitosamente imprime el error y finaliza el programa
@@ -202,13 +249,13 @@ def utnMatch():
 ### Funciones auxiliares INICIO
 def limpiarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear') # si el sistema es win usa el comando cls, en caso contrario asume que es unix y usa clear
-    print(asciiart) # zarpado cartel
+    print(asciiart)
 
 def continuar():
-    input("Presione enter para continuar...") # flaco te imprime un continuar, no es tan dificil
+    input("Presione enter para continuar...")
 
 def opcionInvalida():
-    print("Error: la opcion ingresada no es valida.") # error, sos un pelotudo. ingresa lo que te pido
+    print("Error: la opcion ingresada no es valida.")
     continuar()
 
 def enConstruccion():
@@ -335,6 +382,7 @@ def eliminarPerfil():
         print("Su usuario ha sido deshabilitado, gracias por usar nuestro sistema!")
         continuar()
         menuInicial()
+        return
     else: 
         # gestionarPerfil()
         return
@@ -401,7 +449,8 @@ def mostrarMenuPrincipal():
     print("2. Gestionar candidatos")
     print("3. Matcheos")
     print("4. Reportes estadísticos")
-    print("5. Ruleta")
+    print("5. Bonus track 1")
+    print("6. Bonus track 2")
     print("0. Salir")
 
 def menuPrincipal():
@@ -418,7 +467,9 @@ def menuPrincipal():
         elif opcion == '4':
             mostrarEstadisticos()
         elif opcion == '5':
-            enConstruccion()
+            bonus_track_1()
+        elif opcion == '6':
+            bonus_track_2()
         else:
             opcionInvalida()
 
@@ -789,6 +840,13 @@ def verReportes(): # aca se debe mostrar con alguna forma de tabla los reportes 
     # Solicitar al usuario seleccionar un reporte por su ID
     seleccion = input("Ingrese el numero de reporte que desea modificar el estado o [0] para volver: ")
     
+    try:
+        int(seleccion)
+    except:
+        print("El valor introducido tiene que ser 1, 2 o 0.")
+        continuar()
+        return
+
     if int(seleccion) >= 0 and int(seleccion) <= MAX_ESTUDIANTES:
         seleccion = int(seleccion) - 1  # Convertir a índice de lista
         if 0 <= seleccion < len(reportes):
@@ -877,39 +935,5 @@ def desactivarUsuario():
         return
         # gestionarUsuarios()
 
+
 menuInicial() # EJECUCION
-##################################################################################################################################################################
-
-### Bonus track1 INICIO
-def bonus_track_1():
-    index = 0 # posicion 0 del arreglo   datosEstudiante[6] = input("Introduzca su sexo(M o F): ") # Agregar validacion M o F
-    edades = [0] * MIN_ESTUDIANTES # se crea una arreglo unidimensional de la cantidad de estudiantes activos
-    for est in estudiantes: # se itera por los estudiantes del array ### busca las edades, basicamente ### 
-        if est[0] != '': # verifica que el primer elemento no este vacio
-            edades[index] = obtenerEdad(est[3]) # si se cumple el if, se llama a la funcion obtenerEdad con el cuarto elemento de est como argumento
-            index += 1 # el index se aumenta en 1 para que la proxima iteracion sea en el siguente elemento 
-
-    for i in range(MIN_ESTUDIANTES): # se itera desde 0 hasta la cantidad minima de estudiantes para iniciar sesion-1 ### se ordena el arreglo, basicamente ###
-        for j in range(0, MIN_ESTUDIANTES-i-1): # se itera desde 0 hasta (MIN_ESTUDIANTES-i)-2
-            if edades[j] > edades[j+1]: # se verifica que el argumento actual sea mayor que el siguiente
-                aux = edades[j+1] # Guardar el valor de edades[j+1]
-                edades[j+1] = edades[j] # Mover edades[j] a la posición j+1
-                edades[j] = aux # coloca el valor original de edades[j+1] en la posicion j
-# Al final de cada pasada, el elemento más grande de la sección no ordenada se mueve a su posición final.
-
-    for i in range(MIN_ESTUDIANTES): # se itera desde 0 hasta MIN_ESTUDIANTES-1
-        if edades[i] + 1 != edades[i + 1]: # se verifica que los elementos consecutivos no sean numeros consecutivos  
-            print(f'Existe un hueco entre {edades[i]} y {edades[i+1]}')  
-### Bonus track1 FIN
-
-### Bonus track2 INICIO
-def bonus_track_2(): # lógica: el primer estudiante puede matchear con MIN_ESTUDIANTES -1 estudiante (todos menos él mismo),
-                     # el segundo también tiene MIN_ESTUDIANTES -1 matcheos disponibles pero no se cuenta el matcheo que se
-                     # registró con el primer estudiante, se puede probar que la secuencia es
-                     # e_n = MIN_ESTUDIANTES - n, MIN_ESTUDIANTES >= n >= 1
-    acum = 0
-    for i in range(MIN_ESTUDIANTES): # se itera desde 0 hasta MIN_ESTUDIANTES-1
-        acum += MIN_ESTUDIANTES - i # se suma MIN_ESTUDIANTES - i en cada iteracion, se resta el iterador para que no cuente matcheos anteriores 
-
-    print(f'Hay {acum} matcheos posibles')
-### Bonus track2 FIN
