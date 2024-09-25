@@ -4,7 +4,22 @@ from datetime import datetime
 from interfaz import *
 
 estudiantesDb = './estudiantes.dat'
-estudiantesDbLogica = open(estudiantesDb, 'r+b') if os.path.exists(estudiantesDb) else open(estudiantesDb, 'w+b')
+if os.path.exists(estudiantesDb):
+    estudiantesDbLogica = open(estudiantesDb, 'r+b')
+    try:
+        db = pickle.load(estudiantesDbLogica)  # Intentamos cargar el contenido
+    except EOFError:
+        # Si el archivo está vacío, inicializamos con una lista vacía
+        db = []
+        estudiantesDbLogica.seek(0)
+        pickle.dump(db, estudiantesDbLogica)
+        estudiantesDbLogica.seek(0)
+else:
+    # Si no existe, creamos el archivo y lo inicializamos con una lista vacía
+    estudiantesDbLogica = open(estudiantesDb, 'w+b')
+    db = []
+    pickle.dump(db, estudiantesDbLogica)
+    estudiantesDbLogica.seek(0)
 
 class Estudiante:
     def __init__(self):
@@ -43,6 +58,7 @@ def generarEstudiante(id, email):
 
 def registrarse():
     db = pickle.load(estudiantesDbLogica)
+    estudiantesDbLogica.seek(0)
     email = input('Introduzca su email: ')
     if buscarEstudiante(email, db) != -1:
         print('El estudiante ya se encuentra registrado.')
@@ -52,6 +68,7 @@ def registrarse():
     nuevoEstudiante = generarEstudiante(len(db), email)
     
     pickle.dump(nuevoEstudiante, estudiantesDbLogica)
+    estudiantesDbLogica.seek(0)
 
     print('El estudiante se registró exitosamente.')
     continuar()
