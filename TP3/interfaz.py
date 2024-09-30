@@ -25,24 +25,24 @@ def opcionInvalida():
     print("Error: la opcion ingresada no es valida.")
     continuar()
 
-def mostrarMenuInicial():
+def mostrarMenuInicial():# menu inicial e programa 
     limpiarPantalla()
     console.print('[bold white]Bienvenido![/bold white]', justify='center')
     console.print('1. Iniciar sesión', justify='center')
     console.print('2. Registrarse', justify='center')
     console.print('0. [red]Salir[/red]', justify='center')
 
-def mostrarRegistrarse():
+def mostrarRegistrarse(): # sub menu de mostrarMenuInicial
     limpiarPantalla()
     console.print('1. Registrarse como estudiante', justify='center')
     console.print('2. Registrarse como moderador', justify='center')
     console.print('0. Volver', justify='center')
 
-def mostrarIniciarSesion():
+def mostrarIniciarSesion():# sub menu de mostrarMenuInicial
     limpiarPantalla()
     console.print('[bold white]Por favor ingrese los datos de su cuenta[/bold white]', justify='center')
 
-def mostrarMenuEst():
+def mostrarMenuEst():# menu principal de estudiante 
     limpiarPantalla()
     console.print('[bold white]Bienvenido a UTN MATCH![/bold white]', justify='center')
     console.print('1. Gestionar mi perfil', justify='center')
@@ -51,7 +51,7 @@ def mostrarMenuEst():
     console.print('4. Reportes estadisticos', justify='center')
     console.print('0. [red]Salir[/red]', justify='center')
 
-def mostrarGestionarPerfil():
+def mostrarGestionarPerfil():# sub menu de mostrarMenuEst
     limpiarPantalla()
     console.print('[bold white]Estas gestionando tu perfil[/bold white]', justify='center')
     console.print('1. Editar mis datos personales', justify='center')
@@ -59,7 +59,7 @@ def mostrarGestionarPerfil():
     console.print('3. Eliminar mi perfil', justify='center')
     console.print('0. Volver', justify='center')
 
-def mostrarEditarDatos():
+def mostrarEditarDatos():# sub menu de mostrarGestionarPerfil
     console.print('[bold white]Estas editando tus datos personales[/bold white]', justify='center')
     console.print('[bold white]¿Qué datos deseas editar?[/bold white]', justify='center')
     console.print('1. Fecha de nacimiento', justify='center')
@@ -67,4 +67,13 @@ def mostrarEditarDatos():
     console.print('3. Hobbies', justify='center')
     console.print('0. Volver')
 
-# def                                                     
+def mostrarGestionarCandidatos():# sub menu de mostrarMenuEst
+    limpiarPantalla()
+    console.print('[bold white]Estas gestionando tus candidatos[/bold white]', justify='center')
+    console.print('1. Ver candidatos disponibles', justify='center')
+    console.print('2. Reportar a un candidato', justify='center')
+    console.print('3. Volver', justify='center')
+    
+# def 
+
+mostrarGestionarCandidatos()                                                     
