@@ -25,24 +25,24 @@ def opcionInvalida():
     print("Error: la opcion ingresada no es valida.")
     continuar()
 
-def menuInicial():
+def mostrarMenuInicial():
     limpiarPantalla()
     console.print('[bold white]Bienvenido![/bold white]', justify='center')
     console.print('1. Iniciar sesión', justify='center')
     console.print('2. Registrarse', justify='center')
     console.print('0. [red]Salir[/red]', justify='center')
 
-def registrarse():
+def mostrarRegistrarse():
     limpiarPantalla()
     console.print('1. Registrarse como estudiante', justify='center')
     console.print('2. Registrarse como moderador', justify='center')
     console.print('0. Volver', justify='center')
 
-def iniciarSesion():
+def mostrarIniciarSesion():
     limpiarPantalla()
     console.print('[bold white]Por favor ingrese los datos de su cuenta[/bold white]', justify='center')
 
-def menuEst():
+def mostrarMenuEst():
     limpiarPantalla()
     console.print('[bold white]Bienvenido a UTN MATCH![/bold white]', justify='center')
     console.print('1. Gestionar mi perfil', justify='center')
@@ -51,7 +51,7 @@ def menuEst():
     console.print('4. Reportes estadisticos', justify='center')
     console.print('0. [red]Salir[/red]', justify='center')
 
-def gestionarPerfil():
+def mostrarGestionarPerfil():
     limpiarPantalla()
     console.print('[bold white]Estas gestionando tu perfil[/bold white]', justify='center')
     console.print('1. Editar mis datos personales', justify='center')
@@ -59,7 +59,7 @@ def gestionarPerfil():
     console.print('3. Eliminar mi perfil', justify='center')
     console.print('0. Volver', justify='center')
 
-def editarDatos():
+def mostrarEditarDatos():
     console.print('[bold white]Estas editando tus datos personales[/bold white]', justify='center')
     console.print('[bold white]¿Qué datos deseas editar?[/bold white]', justify='center')
     console.print('1. Fecha de nacimiento', justify='center')
@@ -68,5 +68,3 @@ def editarDatos():
     console.print('0. Volver')
 
 # def                                                     
-
-menuEst()
