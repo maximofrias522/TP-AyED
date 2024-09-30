@@ -345,7 +345,7 @@ def editarHobbies():
 def mostrarEditarDatosPersonales():
     limpiarPantalla()
     print("Estas editando tus datos personales")
-    print("¿Qué datos deseas editar?")
+    print(" ")
     print("a. Fecha de nacimiento")
     print("b. Biografía")
     print("c. Hobbies")
@@ -739,7 +739,7 @@ def registrarse():
 ### Menu inicial INICIO
 def mostrarMenuInicial():
     limpiarPantalla()
-    print('1. Iniciar sesión')
+    print('1. Iniciar sesi      n')
     print('2. Registrarse')
     print('0. Salir')
 

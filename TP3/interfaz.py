@@ -67,6 +67,6 @@ def editarDatos():
     console.print('3. Hobbies', justify='center')
     console.print('0. Volver')
 
-def 
+# def                                                     
 
 menuEst()
