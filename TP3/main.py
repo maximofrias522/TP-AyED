@@ -156,7 +156,7 @@ def registrarEstudiante():
 
 def menuInicial():
     mostrarMenuInicial()
-    opcion = console.input('Seleccione una opción: ', justify='center' )
+    opcion = console.input('Seleccione una opción: ')
 
     while opcion != '0':
         if opcion == '1':
