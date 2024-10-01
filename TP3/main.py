@@ -2,7 +2,7 @@ from datos import *
 from interfaz import *
 from menuEstudiante import menuEstudiante
 from rich.console import Console 
-# from maskpass import askpass
+from maskpass import askpass
 
 console = Console()
 
@@ -14,14 +14,6 @@ def obtenerUsuario(dbFisica, dbLogica, email): # devuelve un usuario o -1 si no 
         if (usuarioActual.estado == True) and (usuarioActual.email == email):
             return usuarioActual
     return -1
-
-
-
-
-
-
-
-
 
 
 
@@ -39,8 +31,8 @@ def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios r
 
 
 def estaDisponibleIniciarSesion():
-    MIN_ESTUDIANTES = 4
-    MIN_MODERADORES = 1
+    MIN_ESTUDIANTES = 1 # deben ser 4
+    MIN_MODERADORES = 1w
     MIN_ADMINISTRADORES = 1
     if obtenerCantUsuario(estudiantesDbFisica, estudiantesDbLogica) < MIN_ESTUDIANTES:
         return False
@@ -57,8 +49,8 @@ def validarContrasena(usuario):
 
     while intentos > 0:
 #        contrasena = askpass(prompt='Introduzca la contraseña: ')
-        contraseña = input('Introduzca la contraseña: ')
-        if usuario.contrasena == contrasena:
+        contrasena = input('Introduzca la contraseña: ')
+        if usuario.contrasena == contrasena:            
             return True
         else:
             intentos -= 1
