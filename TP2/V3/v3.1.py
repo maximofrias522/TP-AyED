@@ -353,7 +353,7 @@ def mostrarEditarDatosPersonales():
 
 def editarDatosPersonales(): # logica del menu
     mostrarEditarDatosPersonales()
-    opcion = input("Seleccione una opción: ")
+    opcion = input("Seleccione una opción: ")               
 
     while opcion != 'd':
         if opcion == 'a':
