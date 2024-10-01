@@ -1,8 +1,10 @@
 from datos import *
 from interfaz import *
 from menuEstudiante import menuEstudiante
-from maskpass import askpass
+from rich.console import Console 
+# from maskpass import askpass
 
+console = Console()
 
 def obtenerUsuario(dbFisica, dbLogica, email): # devuelve un usuario o -1 si no lo encuentra
     tam = os.path.getsize(dbFisica)
@@ -54,7 +56,8 @@ def validarContrasena(usuario):
     intentos = 3
 
     while intentos > 0:
-        contrasena = askpass(prompt='Introduzca la contraseña: ')
+#        contrasena = askpass(prompt='Introduzca la contraseña: ')
+        contraseña = input('Introduzca la contraseña: ')
         if usuario.contrasena == contrasena:
             return True
         else:
@@ -153,7 +156,7 @@ def registrarEstudiante():
 
 def menuInicial():
     mostrarMenuInicial()
-    opcion = input('Seleccione una opción: ')
+    opcion = console.input('Seleccione una opción: ', justify='center' )
 
     while opcion != '0':
         if opcion == '1':
