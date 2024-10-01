@@ -104,7 +104,7 @@ def mostrarGestionarUsuariosMod(): # menu para moderador
 def mostrarGestionarUsuariosAdmin(): # menu para admin
     limpiarPantalla()
     console.print('[bold white]Gestionando usuarios[/bold white]', justify='center')
-    console.print('1. Eliminar usuarios(user o modder)', justify='center)
+    console.print('1. Eliminar usuarios(user o modder)', justify='center')
     console.print('2. Dar de alta un moderador', justify='center')
     console.print('3. Desactivar usuario', justify='center')
     console.print('0. Volver', justify='center')

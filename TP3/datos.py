@@ -41,11 +41,11 @@ def abrirDbLogica(dbFisica, constructor):
         pickle.dump(aux, dbLogica) # se agrega un usuario vacío para evitar errores
         return dbLogica
 
-estudiantesDbFisica = './tp3/databases/estudiantes.dat'
+estudiantesDbFisica = '/home/masi/tp3/databases/estudiantes.dat'
 estudiantesDbLogica = abrirDbLogica(estudiantesDbFisica, Estudiante)
 
-moderadoresDbFisica = './tp3/databases/moderadores.dat'
+moderadoresDbFisica = '/home/masi/tp3/databases/moderadores.dat'
 moderadoresDbLogica = abrirDbLogica(moderadoresDbFisica, Moderador)
 
-administradoresDbFisica = './tp3/databases/administradores.dat'
+administradoresDbFisica = '/home/masi/tp3/databases/administradores.dat'
 administradoresDbLogica = abrirDbLogica(administradoresDbFisica, Administrador)
