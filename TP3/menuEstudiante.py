@@ -3,9 +3,7 @@ from interfaz import *
 
 estudianteActual = Estudiante()
 
-def menuEstudiante(estudiante): # menu principal
-    global estudianteActual
-    estudianteActual = estudiante
+def menuEstudiante(): # menu principal
     
     mostrarMenuEst(estudianteActual.nombre)
     opcion = input('Seleccione una opción: ')
@@ -26,7 +24,7 @@ def menuEstudiante(estudiante): # menu principal
         opcion = input('Seleccione una opción: ')
 
 # Aux S
-def obtenerEdad(estudiante): # toma el parametro fecha
+def obtenerEdad(estudiante): 
     fecha = estudiante.fechaNacimiento
     fecha_actual = datetime.today()
     edad = fecha_actual.year - fecha.year
@@ -153,11 +151,11 @@ def gestionarCandidatos():
         opcion = input('Seleccione una opcion: ')
 
 def verCandidatos(estudiantes, estudianteActual):
-    hayCandidatos = False  # Inicializa una variable para verificar si hay candidatos
+    hayCandidatos = False 
 
     for estudiante in estudiantes:
-        if estudiante.estado and estudiante.id != estudianteActual.id:  # Verifica que el estado sea True y que no sea el estudiante actual
-            edad = obtenerEdad(estudiante)  # Utiliza la función obtenerEdad definida previamente
+        if estudiante.estado and estudiante.id != estudianteActual.id:  
+            edad = obtenerEdad(estudiante)  
             print(f"ID: {estudiante.id}")
             print(f"Nombre: {estudiante.nombre}")
             print(f"Email: {estudiante.email}")
@@ -165,11 +163,29 @@ def verCandidatos(estudiantes, estudianteActual):
             print(f"Edad: {edad} años")
             print(f"Biografía: {estudiante.biografia}")
             print(f"Hobbies: {estudiante.hobbies}")
-            print("-" * 40)  # Línea separadora para mejor visualización
-            hayCandidatos = True  # Cambia el estado a True si se encontró un candidato
+            print("-" * 40) 
+            hayCandidatos = True  
 
-    if not hayCandidatos:  # Si no hay candidatos, muestra un mensaje
+    if not hayCandidatos:  
         print("No hay estudiantes disponibles para mostrar.")
+
+    condicion = input('¿Quieres enviar un match? (escribe "si" para enviar o presiona ENTER para volver): ')
+    if condicion.lower() == 'si':  
+        eleccion = input('Escribe el ID de tu candidato: ')
+        
+        if any(estudiante.id == int(eleccion) for estudiante in estudiantes):  
+            print(f"Match enviado para el estudiante con ID: {eleccion}.")
+            # Logica de la clase likes 
+            # ...
+
+        else:
+            print("El ID ingresado no existe en la lista de estudiantes.")
+
+def reportarCandidato():
+    
+
+
+        
 
     
  
