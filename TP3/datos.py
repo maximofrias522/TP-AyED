@@ -20,7 +20,7 @@ class Moderador:
         self.email = ""
         self.nombre = ""
         self.contrasena = ""
-        self.estado = True
+        self.estado = False # los moderadores se registran y quedan a la espera de habilitacion 
 
 class Administrador:
     def __init__(self):

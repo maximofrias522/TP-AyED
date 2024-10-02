@@ -32,7 +32,7 @@ def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios r
 
 def estaDisponibleIniciarSesion():
     MIN_ESTUDIANTES = 1 # deben ser 4
-    MIN_MODERADORES = 1w
+    MIN_MODERADORES = 1
     MIN_ADMINISTRADORES = 1
     if obtenerCantUsuario(estudiantesDbFisica, estudiantesDbLogica) < MIN_ESTUDIANTES:
         return False
