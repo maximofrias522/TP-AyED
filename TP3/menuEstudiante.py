@@ -3,13 +3,36 @@ from interfaz import *
 
 estudianteActual = Estudiante()
 
-def obtenerEdad(fecha): # toma el parametro fecha
-    fecha = datetime.strptime(fecha, '%d-%m-%Y') # convierte un string (del formato dd-mm-aaaa) en un objeto datetime para operarlo como fecha
-    fecha_actual = datetime.today() # ¿que dia es hoy?
-    edad = fecha_actual.year - fecha.year # calcula la edad
-    if (fecha_actual.month, fecha_actual.day) < (fecha.month, fecha.day): # Si el cumpleaños aún no sucedió le resta 1 a la diferencia de años
-        edad -= 1
-    return str(edad) # devuelve la edad como un str
+def menuEstudiante(estudiante): # menu principal
+    global estudianteActual
+    estudianteActual = estudiante
+    
+    mostrarMenuEst(estudianteActual.nombre)
+    opcion = input('Seleccione una opción: ')
+    
+    while opcion != '0':
+        if opcion == '1':
+            gestionarPerfil()
+        elif opcion == '2':
+            gestionarCandidatos()
+        elif opcion == '3':
+            matcheos()
+        elif opcion == '4':
+            reportesEstadisticos()
+        else:
+            opcionInvalida()
+
+        mostrarMenuEst()
+        opcion = input('Seleccione una opción: ')
+
+# Aux S
+def obtenerEdad(estudiante): # toma el parametro fecha
+    fecha = estudiante.fechaNacimiento
+    fecha_actual = datetime.today()
+    edad = fecha_actual.year - fecha.year
+    if (fecha_actual.month, fecha_actual.day) < (fecha.month, fecha.day):
+        edad -=1
+    return str(edad)
 
 def imprimirDatosDeEstudiante(estudiante):
     print("Nombre: " + estudiante.nombre + "\n" +
@@ -24,42 +47,129 @@ def mostrarPerfil():
     imprimirDatosDeEstudiante(estudianteActual)
 
     continuar()
+# Aux F
 
+
+
+# Gestion perfil S
 def gestionarPerfil():
     mostrarGestionarPerfil()
     opcion = input('Seleccione una opción: ')
 
-    while opcion != 'd':
-        if opcion == 'a':
+    while opcion != '0':
+        if opcion == '1':
             mostrarPerfil()  
-        """ elif opcion == 'b':
+        elif opcion == '2':
             editarDatosPersonales()
-        elif opcion == 'c':
+        elif opcion == '3':
             eliminarPerfil()
         else:
-            opcionInvalida() """
+            opcionInvalida() 
 
         mostrarGestionarPerfil()
         opcion = input('Seleccione una opción: ')
 
-def menuEstudiante(estudiante):
-    global estudianteActual
-    estudianteActual = estudiante
-    
-    mostrarMenuEstudiante(estudianteActual.nombre)
-    opcion = input('Seleccione una opción: ')
-    
+def editarDatosPersonales():
+    mostrarEditarDatos()
+    opcion = input('Seleccione una opcion: ')
     while opcion != '0':
         if opcion == '1':
-            gestionarPerfil()
-        """ elif opcion == '2':
-            gestionarCandidatos()
+            editarFechaNacimiento()
+        elif opcion == '2':
+            editarBiografia()
         elif opcion == '3':
-            matcheos()
-        elif opcion == '4':
-            reportesEstadisticos()
+            editarHobbies()
         else:
-            opcionInvalida() """
+            opcionInvalida()
+        mostrarEditarDatos()
+        opcion = input('Seleccione una opcion: ')
 
-        mostrarMenuEstudiante()
-        opcion = input('Seleccione una opción: ')
+def obtenerFecha(): # para edicion
+    formato_correcto = False 
+    while not formato_correcto: 
+        fecha = input("Ingrese la nueva fecha de nacimiento (dd-mm-aaaa): ")
+        try:
+            dtfecha = datetime.strptime(fecha, "%d-%m-%Y") 
+            if dtfecha > datetime.today(): 
+                console.print("La fecha introducida no es válida. Intente nuevamente.", style='red') 
+            else:
+                formato_correcto = True
+
+        except ValueError as ve:
+            if "does not match format" in str(ve):
+                console.print("El formato de fecha ingresado es incorrecto. Intente nuevamente.", style='red') 
+            else:
+                console.print("Fecha fuera de rango. Intente nuevamente.", style='red') 
+
+    return fecha
+
+def editarFechaNacimiento(estudiante):
+    nueva_fecha = obtenerFecha() 
+    estudiante.fechaNacimiento = nueva_fecha
+    console.print(f"Fecha de nacimiento actualizada a {nueva_fecha.strftime('%d/%m/%Y')}", style='green')
+
+    continuar()
+
+def editarBiografia(estudiante):
+    nueva_biografia = input("Ingrese la nueva biografía: ") 
+    while nueva_biografia == '': 
+        console.print('La biografía no puede estar vacía.', style='red')
+        nueva_biografia = input("Ingrese la nueva biografía: ")
+
+    estudiante.biografia = nueva_biografia
+    console.print('Su nueva biografía es: ', nueva_biografia, style='green')
+
+    continuar()
+
+def editarHobbies(estudiante):
+    nuevo_hobbie = input("Ingrese los nuevos hobbies: ")
+    while nuevo_hobbie == '':
+        console.print('Los hobbies no pueden estar vacíos', style='red')
+        nuevo_hobbie = input("Ingrese los nuevos hobbies: ")
+
+    estudiante.hobbie = nuevo_hobbie 
+    console.print("Sus nuevos hobbies son: ", nuevo_hobbie, style='green')
+
+    continuar()
+
+def eliminarPerfil():
+    enConstruccion()
+# Gestion perfil F
+
+
+# Gestion candidatos S 
+def gestionarCandidatos():
+    mostrarGestionarCandidatos()
+    opcion = input('Seleccione una opcion: ')
+    while opcion != '0':
+        if opcion == '1':
+            verCandidatos()
+        elif opcion == '2':
+            reportarCandidato()
+        else:
+            opcionInvalida()
+
+        mostrarGestionarCandidatos()
+        opcion = input('Seleccione una opcion: ')
+
+def verCandidatos(estudiantes, estudianteActual):
+    hayCandidatos = False  # Inicializa una variable para verificar si hay candidatos
+
+    for estudiante in estudiantes:
+        if estudiante.estado and estudiante.id != estudianteActual.id:  # Verifica que el estado sea True y que no sea el estudiante actual
+            edad = obtenerEdad(estudiante)  # Utiliza la función obtenerEdad definida previamente
+            print(f"ID: {estudiante.id}")
+            print(f"Nombre: {estudiante.nombre}")
+            print(f"Email: {estudiante.email}")
+            print(f"Fecha de Nacimiento: {estudiante.fechaNacimiento.strftime('%d/%m/%Y')}")
+            print(f"Edad: {edad} años")
+            print(f"Biografía: {estudiante.biografia}")
+            print(f"Hobbies: {estudiante.hobbies}")
+            print("-" * 40)  # Línea separadora para mejor visualización
+            hayCandidatos = True  # Cambia el estado a True si se encontró un candidato
+
+    if not hayCandidatos:  # Si no hay candidatos, muestra un mensaje
+        print("No hay estudiantes disponibles para mostrar.")
+
+    
+ 

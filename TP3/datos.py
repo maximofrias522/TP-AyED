@@ -5,29 +5,29 @@ from datetime import datetime
 class Estudiante:
     def __init__(self):
         self.id = 0
-        self.email = ""
-        self.nombre = ""
-        self.contrasena = ""
-        self.sexo = ""
-        self.hobbies = ""
-        self.biografia = ""
+        self.email = "".ljust(50)
+        self.nombre = "".ljust(50)
+        self.contrasena = "".ljust(50)
+        self.sexo = "".ljust(50)
+        self.hobbies = "".ljust(50)
+        self.biografia = "".ljust(50)
         self.fechaNacimiento = datetime.strptime('01/01/1900', '%d/%m/%Y')
         self.estado = True
 
 class Moderador:
     def __init__(self):
         self.id = 0
-        self.email = ""
-        self.nombre = ""
-        self.contrasena = ""
-        self.estado = False # los moderadores se registran y quedan a la espera de habilitacion 
+        self.email = "".ljust(50)
+        self.nombre = "".ljust(50)
+        self.contrasena = "".ljust(50)
+        self.estado = True
 
 class Administrador:
     def __init__(self):
         self.id = 0
-        self.email = ""
-        self.nombre = ""
-        self.contrasena = ""
+        self.email = "".ljust(50)
+        self.nombre = "".ljust(50)
+        self.contrasena = "".ljust(50)
         self.estado = True
 
 def abrirDbLogica(dbFisica, constructor):
@@ -41,11 +41,11 @@ def abrirDbLogica(dbFisica, constructor):
         pickle.dump(aux, dbLogica) # se agrega un usuario vacío para evitar errores
         return dbLogica
 
-estudiantesDbFisica = '/home/mfrias/tp3/databases/estudiantes.dat'
+estudiantesDbFisica = './tp3/databases/estudiantes.dat'
 estudiantesDbLogica = abrirDbLogica(estudiantesDbFisica, Estudiante)
 
-moderadoresDbFisica = '/home/mfrias/tp3/databases/moderadores.dat'
+moderadoresDbFisica = './tp3/databases/moderadores.dat'
 moderadoresDbLogica = abrirDbLogica(moderadoresDbFisica, Moderador)
 
-administradoresDbFisica = '/home/mfrias/tp3/databases/administradores.dat'
+administradoresDbFisica = './tp3/databases/administradores.dat'
 administradoresDbLogica = abrirDbLogica(administradoresDbFisica, Administrador)

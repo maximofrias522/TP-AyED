@@ -25,6 +25,11 @@ def opcionInvalida():
     print("Error: la opcion ingresada no es valida.")
     continuar()
 
+def enConstruccion():
+    limpiarPantalla() 
+    print("En construcción.")
+    continuar()
+
 # Menú inicial del programa
 def mostrarMenuInicial():
     limpiarPantalla()

@@ -1,10 +1,8 @@
 from datos import *
 from interfaz import *
 from menuEstudiante import menuEstudiante
-from rich.console import Console 
 from maskpass import askpass
 
-console = Console()
 
 def obtenerUsuario(dbFisica, dbLogica, email): # devuelve un usuario o -1 si no lo encuentra
     tam = os.path.getsize(dbFisica)
@@ -17,21 +15,33 @@ def obtenerUsuario(dbFisica, dbLogica, email): # devuelve un usuario o -1 si no 
 
 
 
+
+
+
+
+
+
+
+
 # INICIO DE SESIÓN __________________________________________________________________________________________________________
 def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios registrados
     c = 0
 
     tam = os.path.getsize(dbFisica)
     dbLogica.seek(0)
+    ac = dbLogica.tell()
     while dbLogica.tell() < tam:
         usuarioActual = pickle.load(dbLogica)
         if usuarioActual.estado == True:
             c += 1
+        ac = dbLogica.tell()
+
+    return c
 
 
 
 def estaDisponibleIniciarSesion():
-    MIN_ESTUDIANTES = 1 # deben ser 4
+    MIN_ESTUDIANTES = 4
     MIN_MODERADORES = 1
     MIN_ADMINISTRADORES = 1
     if obtenerCantUsuario(estudiantesDbFisica, estudiantesDbLogica) < MIN_ESTUDIANTES:
@@ -48,9 +58,8 @@ def validarContrasena(usuario):
     intentos = 3
 
     while intentos > 0:
-#        contrasena = askpass(prompt='Introduzca la contraseña: ')
-        contrasena = input('Introduzca la contraseña: ')
-        if usuario.contrasena == contrasena:            
+        contrasena = askpass(prompt='Introduzca la contraseña: ').ljust(50)
+        if usuario.contrasena == contrasena:
             return True
         else:
             intentos -= 1
@@ -63,7 +72,7 @@ def validarContrasena(usuario):
 
 
 def validarInicioSesion():
-    email = input('Introduzca su email: ')
+    email = input('Introduzca su email: ').ljust(50)
     usuario = obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, email)
     if usuario == -1:
         usuario = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, email)
@@ -72,7 +81,7 @@ def validarInicioSesion():
     
     while usuario == -1:
         print('Usuario no encontrado, intente nuevamente: ')
-        email = input('Introduzca su email: ')
+        email = input('Introduzca su email: ').ljust(50)
         usuario = obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, email)
         if usuario == -1:
             usuario = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, email)
@@ -87,18 +96,18 @@ def validarInicioSesion():
 
 
 def iniciarSesion():
-    if estaDisponibleIniciarSesion():
+    if not estaDisponibleIniciarSesion():
         print('El inicio de sesión no está disponible.')
         continuar()
         return
     
     usuario = validarInicioSesion()
-    if not usuario == -1:
+    if usuario == -1:
         print('Se introdujo una contraseña incorrecta 3 veces y finalizó el programa.')
         continuar()
         return
 
-    if usuario is Estudiante:
+    if isinstance(usuario, Estudiante):
         menuEstudiante(usuario)
     """ elif usuario is Moderador:
         menuModerador()
@@ -119,27 +128,29 @@ def iniciarSesion():
 # REGISTRO DE ESTUDIANTE ____________________________________________________________________________________________________
 def generarEstudiante(): # retorna un Estudiante o -1 si ya está registrado
     nuevoEstudiante = Estudiante()
-    nuevoEstudiante.email = input('Introduzca su email: ')
-    if (obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoEstudiante.email) != -1 and
-        obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, nuevoEstudiante.email) != -1 and
+    nuevoEstudiante.email = input('Introduzca su email: ').ljust(50)
+    if (obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoEstudiante.email) != -1 or
+        obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, nuevoEstudiante.email) != -1 or
         obtenerUsuario(administradoresDbFisica, administradoresDbLogica, nuevoEstudiante.email) != -1):
         return -1
     
     estudiantesDbLogica.seek(0)
     ultimoEstudiante = pickle.load(estudiantesDbLogica)
     nuevoEstudiante.id = ultimoEstudiante.id + 1
+    nuevoEstudiante.contrasena = input('Introduzca su contraseña: ').ljust(50)
+    nuevoEstudiante.nombre = input('Introduzca su nombre: ').ljust(50)
     return nuevoEstudiante
 
 
 
 def registrarEstudiante():
     nuevoEstudiante = generarEstudiante()
-    if nuevoEstudiante.id == -1:
+    if nuevoEstudiante == -1:
         print('El estudiante ya se encuentra registrado.')
         continuar()
         return
     
-    estudiantesDbLogica.seek(0)
+    estudiantesDbLogica.seek(0, os.SEEK_END)
     pickle.dump(nuevoEstudiante, estudiantesDbLogica)
 
     print('El estudiante se registró exitosamente.')
@@ -148,7 +159,7 @@ def registrarEstudiante():
 
 def menuInicial():
     mostrarMenuInicial()
-    opcion = console.input('Seleccione una opción: ')
+    opcion = input('Seleccione una opción: ')
 
     while opcion != '0':
         if opcion == '1':
@@ -165,5 +176,19 @@ def menuInicial():
     estudiantesDbLogica.close()
     moderadoresDbLogica.close()
     administradoresDbLogica.close()
+
+admin = Administrador()
+admin.email = 'e'.ljust(50)
+admin.contrasena = 'e'.ljust(50)
+admin.nombre = 'e'.ljust(50)
+administradoresDbLogica.seek(0, os.SEEK_END)
+pickle.dump(admin, administradoresDbLogica)
+
+admin = Moderador()
+admin.email = 'f'.ljust(50)
+admin.contrasena = 'f'.ljust(50)
+admin.nombre = 'f'.ljust(50)
+moderadoresDbLogica.seek(0, os.SEEK_END)
+pickle.dump(admin, moderadoresDbLogica)
 
 menuInicial()
