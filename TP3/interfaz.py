@@ -16,7 +16,7 @@ asciiart = '''
 
 def limpiarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear') # si el sistema es win usa el comando cls, en caso contrario asume que es unix y usa clear
-    console.print(asciiart)
+    console.print(asciiart, style='green')
 
 def continuar():
     input("Presione enter para continuar...")
@@ -33,7 +33,7 @@ def enConstruccion():
 # Menú inicial del programa
 def mostrarMenuInicial():
     limpiarPantalla()
-    console.print('[bold white]Bienvenido![/bold white]')
+    console.print('Bienvenido!', style='bold white')
     console.print('1. Iniciar sesión')
     console.print('2. Registrarse')
     console.print('0. [red]Salir[/red]')
