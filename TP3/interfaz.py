@@ -64,13 +64,14 @@ def mostrarMenuEst():
 def mostrarGestionarPerfil():
     limpiarPantalla()
     console.print('[bold white]Estas gestionando tu perfil[/bold white]')
-    console.print('1. Editar mis datos personales')
-    console.print('2. Ver mi perfil')
+    console.print('1. Ver mi perfil')
+    console.print('2. Editar mis datos personales')
     console.print('3. Eliminar mi perfil')
     console.print('0. Volver')
 
 # Submenú de editar datos personales
 def mostrarEditarDatos():
+    limpiarPantalla()
     console.print('[bold white]Estas editando tus datos personales[/bold white]')
     console.print('[bold white]¿Qué datos deseas editar?[/bold white]')
     console.print('1. Fecha de nacimiento')
@@ -84,7 +85,7 @@ def mostrarGestionarCandidatos():
     console.print('[bold white]Estas gestionando tus candidatos[/bold white]')
     console.print('1. Ver candidatos disponibles')
     console.print('2. Reportar a un candidato')
-    console.print('3. Volver')
+    console.print('0. Volver')
 
 # Submenú de matcheos
 def mostrarMatcheos():

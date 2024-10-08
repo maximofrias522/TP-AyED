@@ -1,17 +1,11 @@
+import sys
 from datos import *
 from interfaz import *
 from menuEstudiante import menuEstudiante
 from maskpass import askpass
+from common import *
 
 
-def obtenerUsuario(dbFisica, dbLogica, email): # devuelve un usuario o -1 si no lo encuentra
-    tam = os.path.getsize(dbFisica)
-    dbLogica.seek(0)
-    while dbLogica.tell() < tam:
-        usuarioActual = pickle.load(dbLogica)
-        if (usuarioActual.estado == True) and (usuarioActual.email == email):
-            return usuarioActual
-    return -1
 
 
 
@@ -29,12 +23,10 @@ def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios r
 
     tam = os.path.getsize(dbFisica)
     dbLogica.seek(0)
-    ac = dbLogica.tell()
     while dbLogica.tell() < tam:
         usuarioActual = pickle.load(dbLogica)
         if usuarioActual.estado == True:
             c += 1
-        ac = dbLogica.tell()
 
     return c
 
@@ -135,9 +127,14 @@ def generarEstudiante(): # retorna un Estudiante o -1 si ya está registrado
         return -1
     
     estudiantesDbLogica.seek(0)
-    ultimoEstudiante = pickle.load(estudiantesDbLogica)
+    while estudiantesDbLogica.tell() < os.path.getsize(estudiantesDbFisica): # obtiene el último usuario registrado
+        ultimoEstudiante = pickle.load(estudiantesDbLogica)
+
     nuevoEstudiante.id = ultimoEstudiante.id + 1
     nuevoEstudiante.contrasena = input('Introduzca su contraseña: ').ljust(50)
+    while nuevoEstudiante.contrasena == ''.ljust(50):
+        console.print('La contraseña no puede estar vacía.', style='red')
+        nuevoEstudiante.contrasena = input('Introduzca su contraseña: ').ljust(50)
     nuevoEstudiante.nombre = input('Introduzca su nombre: ').ljust(50)
     return nuevoEstudiante
 
@@ -156,6 +153,15 @@ def registrarEstudiante():
     print('El estudiante se registró exitosamente.')
     continuar()
 # FIN REGISTRO DE ESTUDIANTE ________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
 
 def menuInicial():
     mostrarMenuInicial()
@@ -177,7 +183,7 @@ def menuInicial():
     moderadoresDbLogica.close()
     administradoresDbLogica.close()
 
-admin = Administrador()
+""" admin = Administrador()
 admin.email = 'e'.ljust(50)
 admin.contrasena = 'e'.ljust(50)
 admin.nombre = 'e'.ljust(50)
@@ -190,5 +196,5 @@ admin.contrasena = 'f'.ljust(50)
 admin.nombre = 'f'.ljust(50)
 moderadoresDbLogica.seek(0, os.SEEK_END)
 pickle.dump(admin, moderadoresDbLogica)
-
+ """
 menuInicial()
