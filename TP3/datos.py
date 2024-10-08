@@ -35,29 +35,29 @@ class Like:
         self.idEmisor = 0
         self.idReceptor = 0
 
-def abrirDbLogica(dbFisica, constructor):
+class Reporte:
+    def __init__(self):
+        self.idEmisor = 0
+        self.idReceptor = 0
+        self.estado = 0
+
+def abrirDbLogica(dbFisica):
     if os.path.exists(dbFisica):
         return open(dbFisica, 'r+b')
     else:
-        dbLogica = open(dbFisica, 'w+b')
-        aux = constructor()
-        if aux is Like:
-            aux.idEmisor = -1
-            aux.idReceptor = -1
-        else:
-            aux.id = -1
-            aux.estado = False
-        pickle.dump(aux, dbLogica) # se agrega un usuario vacío para evitar errores
-        return dbLogica
+        return open(dbFisica, 'w+b')
 
 estudiantesDbFisica = './databases/estudiantes.dat'
-estudiantesDbLogica = abrirDbLogica(estudiantesDbFisica, Estudiante)
+estudiantesDbLogica = abrirDbLogica(estudiantesDbFisica)
 
 moderadoresDbFisica = './databases/moderadores.dat'
-moderadoresDbLogica = abrirDbLogica(moderadoresDbFisica, Moderador)
+moderadoresDbLogica = abrirDbLogica(moderadoresDbFisica)
 
 administradoresDbFisica = './databases/administradores.dat'
-administradoresDbLogica = abrirDbLogica(administradoresDbFisica, Administrador)
+administradoresDbLogica = abrirDbLogica(administradoresDbFisica)
 
 likesDbFisica = './databases/likes.dat'
-likesDbLogica = abrirDbLogica(likesDbFisica, Like)
+likesDbLogica = abrirDbLogica(likesDbFisica)
+
+reportesDbFisica = './databases/reportes.dat'
+reportesDbLogica = abrirDbLogica(likesDbFisica)

@@ -130,7 +130,11 @@ def generarEstudiante(): # retorna un Estudiante o -1 si ya está registrado
     while estudiantesDbLogica.tell() < os.path.getsize(estudiantesDbFisica): # obtiene el último usuario registrado
         ultimoEstudiante = pickle.load(estudiantesDbLogica)
 
-    nuevoEstudiante.id = ultimoEstudiante.id + 1
+    try:
+        nuevoEstudiante.id = ultimoEstudiante.id + 1
+    except:
+        nuevoEstudiante.id = 0
+
     nuevoEstudiante.contrasena = input('Introduzca su contraseña: ').ljust(50)
     while nuevoEstudiante.contrasena == ''.ljust(50):
         console.print('La contraseña no puede estar vacía.', style='red')
@@ -149,6 +153,7 @@ def registrarEstudiante():
     
     estudiantesDbLogica.seek(0, os.SEEK_END)
     pickle.dump(nuevoEstudiante, estudiantesDbLogica)
+    estudiantesDbLogica.flush()
 
     print('El estudiante se registró exitosamente.')
     continuar()
@@ -183,12 +188,13 @@ def menuInicial():
     moderadoresDbLogica.close()
     administradoresDbLogica.close()
 
-""" admin = Administrador()
+admin = Administrador()
 admin.email = 'e'.ljust(50)
 admin.contrasena = 'e'.ljust(50)
 admin.nombre = 'e'.ljust(50)
 administradoresDbLogica.seek(0, os.SEEK_END)
 pickle.dump(admin, administradoresDbLogica)
+administradoresDbLogica.flush()
 
 admin = Moderador()
 admin.email = 'f'.ljust(50)
@@ -196,5 +202,6 @@ admin.contrasena = 'f'.ljust(50)
 admin.nombre = 'f'.ljust(50)
 moderadoresDbLogica.seek(0, os.SEEK_END)
 pickle.dump(admin, moderadoresDbLogica)
- """
+administradoresDbLogica.flush()
+
 menuInicial()

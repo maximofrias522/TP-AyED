@@ -36,6 +36,7 @@ def obtenerEdad(fechaNacimiento):
 
 def imprimirDatosDeEstudiante(estudiante):
     print("ID: " + str(estudiante.id) + "\n" +
+          "Email: " + estudiante.email + "\n" +
           "Nombre: " + estudiante.nombre + "\n" +
           "Fecha de nacimiento: " + datetime.strftime(estudiante.fechaNacimiento, '%d/%m/%Y') + "\n" +
           "Edad: " + obtenerEdad(estudiante.fechaNacimiento) + "\n" +
@@ -91,9 +92,9 @@ def editarDatosPersonales():
 def obtenerFecha(): # para edicion
     formato_correcto = False 
     while not formato_correcto: 
-        fecha = input("Ingrese la nueva fecha de nacimiento (dd-mm-aaaa): ")
+        fecha = input("Ingrese la nueva fecha de nacimiento (dd/mm/aaaa): ")
         try:
-            dtfecha = datetime.strptime(fecha, "%d-%m-%Y") 
+            dtfecha = datetime.strptime(fecha, "%d/%m/%Y") 
             if dtfecha > datetime.today(): 
                 console.print("La fecha introducida no es válida. Intente nuevamente.", style='red') 
             else:
@@ -171,32 +172,133 @@ def gestionarCandidatos():
         mostrarGestionarCandidatos()
         opcion = input('Seleccione una opcion: ')
 
-def verCandidatos():
-    listaIdsValidas = []
+def esIdValida(likeOReporte):
+    idValida = False
+    tam = os.path.getsize(estudiantesDbFisica)
+    estudiantesDbLogica.seek(0)
+    while estudiantesDbLogica.tell() < tam:
+        estudiante = pickle.load(estudiantesDbLogica)
+        if estudiante.id == likeOReporte.idReceptor:
+            idValida = True
+
+    return idValida
+
+def darLike():
+    nuevoLike = Like()
+    nuevoLike.idEmisor = estudianteActual.id
+
+    try:
+        nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
+        idValida = esIdValida(nuevoLike)
+    except:
+        idValida = False
+
+    while not idValida:
+        print('ID de usuario no válida.')
+        try:
+            nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
+            idValida = esIdValida(nuevoLike)
+        except:
+            idValida = False
+
+
+    yaTeGusta = False
+    tam = os.path.getsize(likesDbFisica)
+    likesDbLogica.seek(0)
+    while likesDbLogica.tell() < tam:
+        like = pickle.load(likesDbLogica)
+        if (like.idEmisor == nuevoLike.idEmisor) and (like.idReceptor == nuevoLike.idReceptor):
+            yaTeGusta = True
+
+
+    if yaTeGusta:
+        print(f'Ya le diste me gusta en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}')
+        continuar()
+
+    else:
+        likesDbLogica.seek(0, os.SEEK_END)
+        pickle.dump(nuevoLike, likesDbLogica)
+        likesDbLogica.flush()
+        print(f'Le diste like a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}')
+        continuar()
+        
+
+
+def mostrarTodosLosCandidatos():
+    limpiarPantalla()
     tam = os.path.getsize(estudiantesDbFisica)
     estudiantesDbLogica.seek(0)
     while estudiantesDbLogica.tell() < tam:
         estudiante = pickle.load(estudiantesDbLogica)
         if (estudiante.estado == True) and (estudiante.email != estudianteActual.email):
             imprimirDatosDeEstudiante(estudiante)
-            listaIdsValidas.append(estudiante.id)
             print('\n_________________\n')
+
+
+
+def verCandidatos():
+    mostrarTodosLosCandidatos()
 
     opcion = input('¿Querés darle like a algún estudiante? s/n: ').lower()
     while opcion != 'n':
         if opcion == 's':
-            nuevoLike = Like()
-            nuevoLike.idEmisor = estudianteActual.id
-            nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
-            if nuevoLike.idReceptor not in listaIdsValidas:
-                print('ID de usuario no válida.')
-                nuevoLike.idReceptor = print('Ingrese el ID del usuario para darle like: ')
-
-            likesDbLogica.seek(0, os.SEEK_END)
-            pickle.dump(nuevoLike, likesDbLogica)
-            print(f'Le diste like al usuario de ID {nuevoLike.idReceptor}')
-            continuar()
+            darLike()
         else:
             opcionInvalida()
-
+        
+        mostrarTodosLosCandidatos()
         opcion = input('¿Querés darle like a algún estudiante? s/n: ').lower()
+
+
+def reportar():
+    nuevoReporte = Reporte()
+    nuevoReporte.idEmisor = estudianteActual.id
+
+    try:
+        nuevoReporte.idReceptor = int(input('Ingrese el ID o email del usuario para reportarlo: '))
+        idValida = esIdValida(nuevoReporte)
+    except:
+        idValida = False
+
+    while not idValida:
+        print('ID de usuario no válida.')
+        try:
+            nuevoReporte.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
+            idValida = esIdValida(nuevoReporte)
+        except:
+            idValida = False
+
+
+    yaLoReportaste = False
+    tam = os.path.getsize(likesDbFisica)
+    likesDbLogica.seek(0)
+    while likesDbLogica.tell() < tam:
+        like = pickle.load(likesDbLogica)
+        if (like.idEmisor == nuevoReporte.idEmisor) and (like.idReceptor == nuevoReporte.idReceptor):
+            yaLoReportaste = True
+
+
+    if yaTeGusta(nuevoLike):
+        print(f'Ya le diste me gusta en el pasado al usuario de ID {nuevoLike.idReceptor}')
+        continuar()
+
+    else:
+        likesDbLogica.seek(0, os.SEEK_END)
+        pickle.dump(nuevoLike, likesDbLogica)
+        likesDbLogica.flush()
+        print(f'Le diste like al usuario de ID {nuevoLike.idReceptor}')
+        continuar()
+        
+
+def reportarCandidato():
+    mostrarTodosLosCandidatos()
+
+    opcion = input('¿Querés reportar a algún estudiante? s/n: ').lower()
+    while opcion != 'n':
+        if opcion == 's':
+            reportar()
+        else:
+            opcionInvalida()
+        
+        mostrarTodosLosCandidatos()
+        opcion = input('¿Querés reportar a algún estudiante? s/n: ').lower()
