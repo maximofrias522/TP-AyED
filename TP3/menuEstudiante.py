@@ -1,3 +1,4 @@
+import sys
 from datos import *
 from interfaz import *
 from common import *
@@ -172,13 +173,13 @@ def gestionarCandidatos():
         mostrarGestionarCandidatos()
         opcion = input('Seleccione una opcion: ')
 
-def esIdValida(likeOReporte):
+def esIdValida(id):
     idValida = False
     tam = os.path.getsize(estudiantesDbFisica)
     estudiantesDbLogica.seek(0)
     while estudiantesDbLogica.tell() < tam:
         estudiante = pickle.load(estudiantesDbLogica)
-        if estudiante.id == likeOReporte.idReceptor:
+        if estudiante.id == id:
             idValida = True
 
     return idValida
@@ -189,7 +190,10 @@ def darLike():
 
     try:
         nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
-        idValida = esIdValida(nuevoLike)
+        if nuevoLike.idEmisor == nuevoLike.idReceptor:
+            idValida = False
+        else:
+            idValida = esIdValida(nuevoLike.idReceptor)
     except:
         idValida = False
 
@@ -197,7 +201,10 @@ def darLike():
         print('ID de usuario no válida.')
         try:
             nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
-            idValida = esIdValida(nuevoLike)
+            if nuevoLike.idEmisor == nuevoLike.idReceptor:
+                idValida = False
+            else:
+                idValida = esIdValida(nuevoLike.idReceptor)
         except:
             idValida = False
 
@@ -207,7 +214,7 @@ def darLike():
     likesDbLogica.seek(0)
     while likesDbLogica.tell() < tam:
         like = pickle.load(likesDbLogica)
-        if (like.idEmisor == nuevoLike.idEmisor) and (like.idReceptor == nuevoLike.idReceptor):
+        if (like.idEmisor == nuevoLike.idEmisor) and (like.idReceptor == nuevoLike.idReceptor) and (like.estado == True):
             yaTeGusta = True
 
 
@@ -256,37 +263,43 @@ def reportar():
 
     try:
         nuevoReporte.idReceptor = int(input('Ingrese el ID o email del usuario para reportarlo: '))
-        idValida = esIdValida(nuevoReporte)
+        if nuevoReporte.idEmisor == nuevoReporte.idReceptor:
+            idValida = False
+        else:
+            idValida = esIdValida(nuevoReporte.idReceptor)
     except:
         idValida = False
 
     while not idValida:
         print('ID de usuario no válida.')
         try:
-            nuevoReporte.idReceptor = int(input('Ingrese el ID del usuario para darle like: '))
-            idValida = esIdValida(nuevoReporte)
+            nuevoReporte.idReceptor = int(input('Ingrese el ID o email del usuario para reportarlo: '))
+            if nuevoReporte.idEmisor == nuevoReporte.idReceptor:
+                idValida = False
+            else:
+                idValida = esIdValida(nuevoReporte.idReceptor)
         except:
             idValida = False
 
 
     yaLoReportaste = False
-    tam = os.path.getsize(likesDbFisica)
-    likesDbLogica.seek(0)
-    while likesDbLogica.tell() < tam:
-        like = pickle.load(likesDbLogica)
-        if (like.idEmisor == nuevoReporte.idEmisor) and (like.idReceptor == nuevoReporte.idReceptor):
+    tam = os.path.getsize(reportesDbFisica)
+    reportesDbLogica.seek(0)
+    while reportesDbLogica.tell() < tam:
+        reporte = pickle.load(reportesDbLogica)
+        if (reporte.idEmisor == nuevoReporte.idEmisor) and (reporte.idReceptor == nuevoReporte.idReceptor):
             yaLoReportaste = True
 
 
-    if yaTeGusta(nuevoLike):
-        print(f'Ya le diste me gusta en el pasado al usuario de ID {nuevoLike.idReceptor}')
+    if yaLoReportaste:
+        print(f'Ya reportaste en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}')
         continuar()
 
     else:
-        likesDbLogica.seek(0, os.SEEK_END)
-        pickle.dump(nuevoLike, likesDbLogica)
-        likesDbLogica.flush()
-        print(f'Le diste like al usuario de ID {nuevoLike.idReceptor}')
+        reportesDbLogica.seek(0, os.SEEK_END)
+        pickle.dump(nuevoReporte, reportesDbLogica)
+        reportesDbLogica.flush()
+        print(f'Reportaste a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}')
         continuar()
         
 
@@ -302,3 +315,86 @@ def reportarCandidato():
         
         mostrarTodosLosCandidatos()
         opcion = input('¿Querés reportar a algún estudiante? s/n: ').lower()
+
+
+def eliminarMatch(likesDados):
+    valido = False
+    while not valido:
+        matchAEliminar = int(input('Ingrese el ID del usuario para eliminar el match: '))
+        if matchAEliminar in likesDados:
+            valido = True
+            tam = os.path.getsize(likesDbFisica)
+            likesDbLogica.seek(0)
+            while likesDbLogica.tell() < tam:
+                pos = likesDbLogica.tell()
+                like = pickle.load(likesDbLogica)
+                if like.idEmisor == estudianteActual.id and like.idReceptor == matchAEliminar:
+                    like.estado = False
+                    likesDbLogica.seek(pos)
+                    pickle.dump(like, likesDbLogica)
+                    likesDbLogica.flush()
+                    tam = 0
+
+    print('Eliminaste el match')
+
+def matcheos():
+    likesDados = []
+    likesRecibidos = []
+    tam = os.path.getsize(likesDbFisica)
+    likesDbLogica.seek(0)
+    while likesDbLogica.tell() < tam:
+        like = pickle.load(likesDbLogica)
+        if like.idEmisor == estudianteActual.id and like.estado == True:
+            likesDados.append(like.idReceptor)
+        if like.idReceptor == estudianteActual.id and like.estado == True:
+            likesRecibidos.append(like.idEmisor)
+
+    limpiarPantalla()
+    hayMatchs = False
+    for id in likesDados:
+        if id in likesRecibidos:
+            hayMatchs = True
+            imprimirDatosDeEstudiante(obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, id))
+            print('\n_________________\n')
+    
+    if not hayMatchs:
+        print('No tenés matchs')
+    else:
+        opcion = input('¿Querés eliminar algún match? s/n: ').lower()
+        while opcion != 'n':
+            if opcion == 's':
+                eliminarMatch(likesDados)
+            else:
+                opcionInvalida()
+
+    continuar()
+            
+
+def reportesEstadisticos():
+    likesDados = []
+    likesRecibidos = []
+    tam = os.path.getsize(likesDbFisica)
+    likesDbLogica.seek(0)
+    while likesDbLogica.tell() < tam:
+        like = pickle.load(likesDbLogica)
+        if like.idEmisor == estudianteActual.id and like.estado == True:
+            likesDados.append(like.idReceptor)
+        if like.idReceptor == estudianteActual.id and like.estado == True:
+            likesRecibidos.append(like.idEmisor)
+    
+    limpiarPantalla()
+    matcheos = 0
+    likesDadosYNoDevueltos = 0
+    for id in likesDados:
+        if id in likesRecibidos:
+            matcheos += 1
+        else:
+            likesDadosYNoDevueltos += 1
+    likesRecibidosYNoDevueltos = 2 * matcheos - likesDadosYNoDevueltos
+    estudiantesDbLogica.seek(0)
+    cantidadDeEstudiantes = obtenerCantUsuario(estudiantesDbFisica, estudiantesDbLogica)
+
+    print(f'Matcheaste con el {matcheos * 100 / cantidadDeEstudiantes}% de los estudiantes')
+    print(f'Likes dados y no devueltos: {likesDadosYNoDevueltos}')
+    print(f'Likes recibidos y no devueltos: {likesRecibidosYNoDevueltos}')
+    continuar()

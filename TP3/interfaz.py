@@ -93,7 +93,7 @@ def mostrarMatcheos():
     console.print('[bold white]Matcheos[/bold white]')
     console.print('1. Ver matcheos')
     console.print('2. Eliminar match')
-    console.print('3. Volver')
+    console.print('0. Volver')
 
 # Menú moderador/administrador
 def mostrarMenuMod():

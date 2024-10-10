@@ -18,18 +18,6 @@ from common import *
 
 
 # INICIO DE SESIÓN __________________________________________________________________________________________________________
-def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios registrados
-    c = 0
-
-    tam = os.path.getsize(dbFisica)
-    dbLogica.seek(0)
-    while dbLogica.tell() < tam:
-        usuarioActual = pickle.load(dbLogica)
-        if usuarioActual.estado == True:
-            c += 1
-
-    return c
-
 
 
 def estaDisponibleIniciarSesion():

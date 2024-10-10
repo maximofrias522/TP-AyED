@@ -34,6 +34,7 @@ class Like:
     def __init__(self):
         self.idEmisor = 0
         self.idReceptor = 0
+        self.estado = True
 
 class Reporte:
     def __init__(self):
@@ -60,4 +61,4 @@ likesDbFisica = './databases/likes.dat'
 likesDbLogica = abrirDbLogica(likesDbFisica)
 
 reportesDbFisica = './databases/reportes.dat'
-reportesDbLogica = abrirDbLogica(likesDbFisica)
+reportesDbLogica = abrirDbLogica(reportesDbFisica)
