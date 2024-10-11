@@ -22,7 +22,7 @@ def continuar():
     input("Presione enter para continuar...")
 
 def opcionInvalida():
-    print("Error: la opcion ingresada no es valida.")
+    console.print("Error: la opcion ingresada no es valida.", style='red')
     continuar()
 
 def enConstruccion():

@@ -4,8 +4,9 @@ from interfaz import *
 from menuEstudiante import menuEstudiante
 from maskpass import askpass
 from common import *
+from rich.console import Console
 
-
+console = Console()
 
 
 
@@ -44,7 +45,7 @@ def validarContrasena(usuario):
         else:
             intentos -= 1
             if intentos > 0:
-                print('Contraseña incorrecta, intente nuevamente.')
+                console.print('Contraseña incorrecta, intente nuevamente.', style='red')
 
     if intentos == 0:
         return False
@@ -60,7 +61,7 @@ def validarInicioSesion():
         usuario = obtenerUsuario(administradoresDbFisica, administradoresDbLogica, email)
     
     while usuario == -1:
-        print('Usuario no encontrado, intente nuevamente: ')
+        console.print('Usuario no encontrado, intente nuevamente: ', style='red')
         email = input('Introduzca su email: ').ljust(50)
         usuario = obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, email)
         if usuario == -1:
@@ -77,13 +78,13 @@ def validarInicioSesion():
 
 def iniciarSesion():
     if not estaDisponibleIniciarSesion():
-        print('El inicio de sesión no está disponible.')
+        console.print('El inicio de sesión no está disponible.', style='red')
         continuar()
         return
     
     usuario = validarInicioSesion()
     if usuario == -1:
-        print('Se introdujo una contraseña incorrecta 3 veces y finalizó el programa.')
+        console.print('Se introdujo una contraseña incorrecta 3 veces y finalizó el programa.', style='red')
         continuar()
         return
 
@@ -135,7 +136,7 @@ def generarEstudiante(): # retorna un Estudiante o -1 si ya está registrado
 def registrarEstudiante():
     nuevoEstudiante = generarEstudiante()
     if nuevoEstudiante == -1:
-        print('El estudiante ya se encuentra registrado.')
+        console.print('El estudiante ya se encuentra registrado.', style='green')
         continuar()
         return
     
@@ -148,9 +149,45 @@ def registrarEstudiante():
 # FIN REGISTRO DE ESTUDIANTE ________________________________________________________________________________________________
 
 
+def generarModder():
+    enConstruccion()
+    nuevoModder = Moderador()
+    nuevoModder.email = input('Introduzca su email: ').ljust(50)
+    if (obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoModder.email) != -1 or
+        obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, nuevoModder.email) != -1 or
+        obtenerUsuario(administradoresDbFisica, administradoresDbLogica, nuevoModder.email) != -1):
+        return -1
+    
+    moderadoresDbLogica.seek(0)
+    while moderadoresDbLogica.tell() < os.path.getsize(moderadoresDbFisica): # obtiene el último usuario registrado
+        ultimoModder = pickle.load(moderadoresDbLogica)
 
+    try:
+        nuevoModder.id = ultimoModder.id + 1
+    except:
+        nuevoModder.id = 0
 
+    nuevoModder.contrasena = input('Introduzca su contraseña: ').ljust(50)
+    while nuevoModder.contrasena == ''.ljust(50):
+        console.print('La contraseña no puede estar vacía.', style='red')
+        nuevoModder.contrasena = input('Introduzca su contraseña: ').ljust(50)
+    nuevoModder.nombre = input('Introduzca su nombre: ').ljust(50)
+    return nuevoModder
 
+def registrarModder():
+    enConstruccion()
+    nuevoModder = generarModder()
+    if nuevoModder == -1:
+        console.print('El moderador ya se encuentra registrado.', style='green')
+        continuar()
+        return
+
+    moderadoresDbLogica.seek(0, os.SEEK_END)
+    pickle.dump(nuevoModder, moderadoresDbLogica)
+    moderadoresDbLogica.flush()
+
+    print('El moderador se registró exitosamente. Para iniciar sesion debe esperar a que un admin lo valide.')
+    continuar()
 
 
 
@@ -164,7 +201,13 @@ def menuInicial():
         if opcion == '1':
             iniciarSesion()
         elif opcion == '2':
-            registrarEstudiante()
+            des = input('Desea registrarse como estudiante o moderador? (E/M): ').lower()
+            if des == 'e':
+                registrarEstudiante()
+            elif des == 'm':
+                registrarModder()
+            else:
+                opcionInvalida()
         else:
             opcionInvalida()
         

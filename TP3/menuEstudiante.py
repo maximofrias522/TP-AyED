@@ -3,6 +3,7 @@ from datos import *
 from interfaz import *
 from common import *
 
+
 estudianteActual = Estudiante()
 
 def menuEstudiante(usuario): # menu principal
@@ -46,7 +47,7 @@ def imprimirDatosDeEstudiante(estudiante):
 
 def mostrarPerfil():
     limpiarPantalla()
-    print("Estás viendo tu perfil")
+    console.print("Estás viendo tu perfil", style='bold white')
     imprimirDatosDeEstudiante(estudianteActual)
 
     continuar()
@@ -147,7 +148,7 @@ def eliminarPerfil():
         if opcion == 's':
             estudianteActual.estado = False
             sobrescribirUsuario(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
-            print('Su perfil se eliminó correctamente.')
+            console.print('Su perfil se eliminó correctamente.', style='green')
             continuar()
             return True
         else:
@@ -219,14 +220,14 @@ def darLike():
 
 
     if yaTeGusta:
-        print(f'Ya le diste me gusta en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}')
+        console.print(f'Ya le diste me gusta en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}', style='green')
         continuar()
 
     else:
         likesDbLogica.seek(0, os.SEEK_END)
         pickle.dump(nuevoLike, likesDbLogica)
         likesDbLogica.flush()
-        print(f'Le diste like a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}')
+        console.print(f'Le diste like a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}', style='green')
         continuar()
         
 
@@ -271,7 +272,7 @@ def reportar():
         idValida = False
 
     while not idValida:
-        print('ID de usuario no válida.')
+        console.print('ID de usuario no válida.', style='red')
         try:
             nuevoReporte.idReceptor = int(input('Ingrese el ID o email del usuario para reportarlo: '))
             if nuevoReporte.idEmisor == nuevoReporte.idReceptor:
@@ -292,14 +293,14 @@ def reportar():
 
 
     if yaLoReportaste:
-        print(f'Ya reportaste en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}')
+        console.print(f'Ya reportaste en el pasado a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}', style='green')
         continuar()
 
     else:
         reportesDbLogica.seek(0, os.SEEK_END)
         pickle.dump(nuevoReporte, reportesDbLogica)
         reportesDbLogica.flush()
-        print(f'Reportaste a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}')
+        console.print(f'Reportaste a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor).nombre}', style='green')
         continuar()
         
 
@@ -335,7 +336,7 @@ def eliminarMatch(likesDados):
                     likesDbLogica.flush()
                     tam = 0
 
-    print('Eliminaste el match')
+    console.print('Eliminaste el match', style='green')
 
 def matcheos():
     likesDados = []
@@ -358,7 +359,7 @@ def matcheos():
             print('\n_________________\n')
     
     if not hayMatchs:
-        print('No tenés matchs')
+        console.print('No tenés matchs', style='blue')
     else:
         opcion = input('¿Querés eliminar algún match? s/n: ').lower()
         while opcion != 'n':
