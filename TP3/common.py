@@ -27,10 +27,10 @@ def obtenerUsuario(dbFisica, dbLogica, emailOId): # devuelve un usuario o -1 si 
     dbLogica.seek(pos)
     return pickle.load(dbLogica)
 
-def sobrescribirUsuario(dbFisica, dbLogica, estudiante):
-    pos = obtenerPosicionUsuario(dbFisica, dbLogica, estudiante.email)
+def sobrescribirUsuario(dbFisica, dbLogica, usuario):
+    pos = obtenerPosicionUsuario(dbFisica, dbLogica, usuario.email)
     dbLogica.seek(pos)
-    pickle.dump(estudiante, dbLogica)
+    pickle.dump(usuario, dbLogica)
     dbLogica.flush()
 
 def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios registrados
@@ -44,3 +44,40 @@ def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios r
             c += 1
 
     return c
+
+def esIdValida(id):
+    idValida = False
+    tam = os.path.getsize(estudiantesDbFisica)
+    estudiantesDbLogica.seek(0)
+    while estudiantesDbLogica.tell() < tam:
+        estudiante = pickle.load(estudiantesDbLogica)
+        if estudiante.id == id and estudiante.estado == True:
+            idValida = True
+
+    return idValida
+
+def eliminarEstudiante(dbFisica, dbLogica, usuario):
+    usuario.estado = False
+    sobrescribirUsuario(dbFisica, dbLogica, usuario)
+    if isinstance(usuario, Estudiante):
+        tam = os.path.getsize(likesDbFisica)
+        likesDbLogica.seek(0)
+        while likesDbLogica.tell() < tam:
+            pos = likesDbLogica.tell()
+            likeActual = pickle.load(likesDbLogica)
+            if ((likeActual.idEmisor == usuario.id) or (likeActual.idReceptor == usuario.id)) and (likeActual.estado == True):
+                likeActual.estado = False
+            likesDbLogica.seek(pos)
+            pickle.dump(likeActual, likesDbLogica)
+            likesDbLogica.flush()
+
+        tam = os.path.getsize(reportesDbFisica)
+        reportesDbLogica.seek(0)
+        while reportesDbLogica.tell() < tam:
+            pos = reportesDbLogica.tell()
+            reporteActual = pickle.load(reportesDbLogica)
+            if ((reporteActual.idEmisor == usuario.id) or (reporteActual.idReceptor == usuario.id)) and (reporteActual.estado == 0):
+                reporteActual.estado = 1
+            reportesDbLogica.seek(pos)
+            pickle.dump(reporteActual, reportesDbLogica)
+            reportesDbLogica.flush()

@@ -146,14 +146,13 @@ def eliminarPerfil():
     opcion = input('¿Está seguro de que desea eliminar su perfil? s/n: ').lower()
     while opcion != 'n':
         if opcion == 's':
-            estudianteActual.estado = False
-            sobrescribirUsuario(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
+            eliminarEstudiante(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
             console.print('Su perfil se eliminó correctamente.', style='green')
             continuar()
             return True
         else:
             opcionInvalida()
-        opcion = input('¿Está seguro de que desea eliminar su perfil? s/n: ')
+        opcion = input('¿Está seguro de que desea eliminar su perfil? s/n: ').lower()
 
     return False
 # Gestion perfil F
@@ -173,17 +172,6 @@ def gestionarCandidatos():
 
         mostrarGestionarCandidatos()
         opcion = input('Seleccione una opcion: ')
-
-def esIdValida(id):
-    idValida = False
-    tam = os.path.getsize(estudiantesDbFisica)
-    estudiantesDbLogica.seek(0)
-    while estudiantesDbLogica.tell() < tam:
-        estudiante = pickle.load(estudiantesDbLogica)
-        if estudiante.id == id:
-            idValida = True
-
-    return idValida
 
 def darLike():
     nuevoLike = Like()
