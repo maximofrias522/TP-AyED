@@ -3,7 +3,6 @@ from datos import *
 from interfaz import *
 from common import *
 
-
 estudianteActual = Estudiante()
 
 def menuEstudiante(usuario): # menu principal
@@ -270,6 +269,7 @@ def reportar():
         except:
             idValida = False
 
+    
 
     yaLoReportaste = False
     tam = os.path.getsize(reportesDbFisica)

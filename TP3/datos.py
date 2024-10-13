@@ -37,10 +37,13 @@ class Like:
         self.estado = True
 
 class Reporte:
-    def __init__(self):
-        self.idEmisor = 0
-        self.idReceptor = 0
-        self.estado = 0
+    def __init__(self, idEmisor=0, idReceptor=0, motivo="", estado=0, idMod=0):
+        self.idEmisor = idEmisor
+        self.idReceptor = idReceptor
+        self.motivo = motivo.ljust(50)  
+        self.estado = estado
+        self.idMod = idMod
+
 
 def abrirDbLogica(dbFisica):
     if os.path.exists(dbFisica):
