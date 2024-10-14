@@ -114,11 +114,9 @@ def eliminarUsuario():
     while opcion != '-1':
         try:
             if esIdValida(opcion):
-                estudiante = obtenerUsuario(opcion)
-                estudiante.estado = False  
-
-                sobrescribirUsuario(estudiantesDbFisica, estudiantesDbLogica, estudiante)
+                eliminarUsuario(estudiantesDbFisica, estudiantesDbLogica, obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, opcion))
                 console.print('El usuario se eliminó correctamente.', style='green')
+                continuar()
 
                 actualizarReportesPorUsuario(opcion, modderActual.id)
 
@@ -151,4 +149,3 @@ def actualizarReportesPorUsuario(userId, modderId):
                 break
             except Exception as e:
                 console.print(f'Error al actualizar el reporte: {e}', style='red')
-

@@ -12,6 +12,8 @@ class Estudiante:
         self.hobbies = "".ljust(50)
         self.biografia = "".ljust(50)
         self.fechaNacimiento = datetime.strptime('01/01/1900', '%d/%m/%Y')
+        self.superlike = True
+        self.revelarCandidatos = True
         self.estado = True
 
 class Moderador:
@@ -37,13 +39,12 @@ class Like:
         self.estado = True
 
 class Reporte:
-    def __init__(self, idEmisor=0, idReceptor=0, motivo="", estado=0, idMod=0):
-        self.idEmisor = idEmisor
-        self.idReceptor = idReceptor
-        self.motivo = motivo.ljust(50)  
-        self.estado = estado
-        self.idMod = idMod
-
+    def __init__(self):
+        self.idEmisor = 0
+        self.idReceptor = 0
+        self.motivo = "".ljust(100)
+        self.estado = 0
+        self.idMod = -1
 
 def abrirDbLogica(dbFisica):
     if os.path.exists(dbFisica):

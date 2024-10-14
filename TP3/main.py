@@ -1,7 +1,9 @@
-import sys
+import random
 from datos import *
 from interfaz import *
 from menuEstudiante import menuEstudiante
+from menuModerador import menuModerador
+from menuAdmin import menuAdmin
 from maskpass import askpass
 from common import *
 from rich.console import Console
@@ -74,7 +76,19 @@ def validarInicioSesion():
     else:
         return -1
 
+def cargarLikes():
+    cantEstudiantes = obtenerCantUsuario(estudiantesDbFisica, estudiantesDbLogica)
+    for idEmisor in range(cantEstudiantes):
+        for idReceptor in range(cantEstudiantes):
+            if idEmisor != idReceptor and random.random() <= 0.5: # 50% de probabilidad
+                nuevoLike = Like()
+                nuevoLike.idEmisor = idEmisor
+                nuevoLike.idReceptor = idReceptor
+                pickle.dump(nuevoLike, likesDbLogica)
+                likesDbLogica.flush()
 
+    
+    
 
 def iniciarSesion():
     if not estaDisponibleIniciarSesion():
@@ -88,12 +102,15 @@ def iniciarSesion():
         continuar()
         return
 
+    if os.path.getsize(likesDbFisica) == 0:
+        cargarLikes()
+
     if isinstance(usuario, Estudiante):
         menuEstudiante(usuario)
-    """ elif usuario is Moderador:
-        menuModerador()
-    elif usuario is Administrador:
-        menuAdministrador() """
+    elif isinstance(usuario, Moderador):
+        menuModerador(usuario)
+    elif isinstance(usuario, Administrador):
+        menuAdmin(usuario)
 
 # FIN INICIO DE SESIÓN ______________________________________________________________________________________________________
 
@@ -149,46 +166,6 @@ def registrarEstudiante():
 # FIN REGISTRO DE ESTUDIANTE ________________________________________________________________________________________________
 
 
-def generarModder():
-    enConstruccion()
-    nuevoModder = Moderador()
-    nuevoModder.email = input('Introduzca su email: ').ljust(50)
-    if (obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoModder.email) != -1 or
-        obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, nuevoModder.email) != -1 or
-        obtenerUsuario(administradoresDbFisica, administradoresDbLogica, nuevoModder.email) != -1):
-        return -1
-    
-    moderadoresDbLogica.seek(0)
-    while moderadoresDbLogica.tell() < os.path.getsize(moderadoresDbFisica): # obtiene el último usuario registrado
-        ultimoModder = pickle.load(moderadoresDbLogica)
-
-    try:
-        nuevoModder.id = ultimoModder.id + 1
-    except:
-        nuevoModder.id = 0
-
-    nuevoModder.contrasena = input('Introduzca su contraseña: ').ljust(50)
-    while nuevoModder.contrasena == ''.ljust(50):
-        console.print('La contraseña no puede estar vacía.', style='red')
-        nuevoModder.contrasena = input('Introduzca su contraseña: ').ljust(50)
-    nuevoModder.nombre = input('Introduzca su nombre: ').ljust(50)
-    return nuevoModder
-
-def registrarModder():
-    enConstruccion()
-    nuevoModder = generarModder()
-    if nuevoModder == -1:
-        console.print('El moderador ya se encuentra registrado.', style='green')
-        continuar()
-        return
-
-    moderadoresDbLogica.seek(0, os.SEEK_END)
-    pickle.dump(nuevoModder, moderadoresDbLogica)
-    moderadoresDbLogica.flush()
-
-    print('El moderador se registró exitosamente. Para iniciar sesion debe esperar a que un admin lo valide.')
-    continuar()
-
 
 
 
@@ -201,13 +178,7 @@ def menuInicial():
         if opcion == '1':
             iniciarSesion()
         elif opcion == '2':
-            des = input('Desea registrarse como estudiante o moderador? (E/M): ').lower()
-            if des == 'e':
-                registrarEstudiante()
-            elif des == 'm':
-                registrarModder()
-            else:
-                opcionInvalida()
+            registrarEstudiante()
         else:
             opcionInvalida()
         
@@ -219,20 +190,23 @@ def menuInicial():
     moderadoresDbLogica.close()
     administradoresDbLogica.close()
 
-admin = Administrador()
-admin.email = 'e'.ljust(50)
-admin.contrasena = 'e'.ljust(50)
-admin.nombre = 'e'.ljust(50)
-administradoresDbLogica.seek(0, os.SEEK_END)
-pickle.dump(admin, administradoresDbLogica)
-administradoresDbLogica.flush()
 
-admin = Moderador()
-admin.email = 'f'.ljust(50)
-admin.contrasena = 'f'.ljust(50)
-admin.nombre = 'f'.ljust(50)
-moderadoresDbLogica.seek(0, os.SEEK_END)
-pickle.dump(admin, moderadoresDbLogica)
-administradoresDbLogica.flush()
+if os.path.getsize(administradoresDbFisica) == 0:
+    admin = Administrador()
+    admin.email = 'admin@ayed.com'.ljust(50)
+    admin.contrasena = 'admin'.ljust(50)
+    admin.nombre = 'Administrador'.ljust(50)
+    administradoresDbLogica.seek(0, os.SEEK_END)
+    pickle.dump(admin, administradoresDbLogica)
+    administradoresDbLogica.flush()
+
+if os.path.getsize(moderadoresDbFisica) == 0:
+    admin = Moderador()
+    admin.email = 'mod@ayed.com'.ljust(50)
+    admin.contrasena = 'mod'.ljust(50)
+    admin.nombre = 'Moderador'.ljust(50)
+    moderadoresDbLogica.seek(0, os.SEEK_END)
+    pickle.dump(admin, moderadoresDbLogica)
+    administradoresDbLogica.flush()
 
 menuInicial()

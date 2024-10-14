@@ -1,4 +1,5 @@
 from datos import *
+from interfaz import limpiarPantalla
 
 
 def obtenerPosicionUsuario(dbFisica, dbLogica, emailOId): # devuelve la posición en bytes de un usuario o -1 si no lo encuentra
@@ -45,18 +46,18 @@ def obtenerCantUsuario(dbFisica, dbLogica): # devuelve la cantidad de usuarios r
 
     return c
 
-def esIdValida(id):
+def esIdValida(dbFisica, dbLogica, id):
     idValida = False
-    tam = os.path.getsize(estudiantesDbFisica)
-    estudiantesDbLogica.seek(0)
-    while estudiantesDbLogica.tell() < tam:
-        estudiante = pickle.load(estudiantesDbLogica)
-        if estudiante.id == id and estudiante.estado == True:
+    tam = os.path.getsize(dbFisica)
+    dbLogica.seek(0)
+    while dbLogica.tell() < tam:
+        usuario = pickle.load(dbLogica)
+        if usuario.id == id and usuario.estado == True:
             idValida = True
 
     return idValida
 
-def eliminarEstudiante(dbFisica, dbLogica, usuario):
+def eliminarUsuario(dbFisica, dbLogica, usuario):
     usuario.estado = False
     sobrescribirUsuario(dbFisica, dbLogica, usuario)
     if isinstance(usuario, Estudiante):
@@ -81,3 +82,29 @@ def eliminarEstudiante(dbFisica, dbLogica, usuario):
             reportesDbLogica.seek(pos)
             pickle.dump(reporteActual, reportesDbLogica)
             reportesDbLogica.flush()
+
+def obtenerEdad(fechaNacimiento): 
+    fecha_actual = datetime.today()
+    edad = fecha_actual.year - fechaNacimiento.year
+    if (fecha_actual.month, fecha_actual.day) < (fechaNacimiento.month, fechaNacimiento.day):
+        edad -=1
+    return str(edad)
+
+def imprimirDatosDeEstudiante(estudiante):
+    print("ID: " + str(estudiante.id) + "\n" +
+          "Email: " + estudiante.email + "\n" +
+          "Nombre: " + estudiante.nombre + "\n" +
+          "Fecha de nacimiento: " + datetime.strftime(estudiante.fechaNacimiento, '%d/%m/%Y') + "\n" +
+          "Edad: " + obtenerEdad(estudiante.fechaNacimiento) + "\n" +
+          "Biografía: " + estudiante.biografia + "\n" +
+          "Hobbies: " + estudiante.hobbies)
+
+def mostrarTodosLosEstudiantes(idUsuarioActual):
+    limpiarPantalla()
+    tam = os.path.getsize(estudiantesDbFisica)
+    estudiantesDbLogica.seek(0)
+    while estudiantesDbLogica.tell() < tam:
+        estudiante = pickle.load(estudiantesDbLogica)
+        if (estudiante.estado == True) and (estudiante.email != idUsuarioActual):
+            imprimirDatosDeEstudiante(estudiante)
+            print('\n_________________\n')

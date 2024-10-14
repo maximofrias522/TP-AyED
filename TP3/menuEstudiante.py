@@ -1,7 +1,7 @@
-import sys
 from datos import *
 from interfaz import *
 from common import *
+
 
 estudianteActual = Estudiante()
 
@@ -28,21 +28,6 @@ def menuEstudiante(usuario): # menu principal
         opcion = input('Seleccione una opción: ')
 
 # Aux S
-def obtenerEdad(fechaNacimiento): 
-    fecha_actual = datetime.today()
-    edad = fecha_actual.year - fechaNacimiento.year
-    if (fecha_actual.month, fecha_actual.day) < (fechaNacimiento.month, fechaNacimiento.day):
-        edad -=1
-    return str(edad)
-
-def imprimirDatosDeEstudiante(estudiante):
-    print("ID: " + str(estudiante.id) + "\n" +
-          "Email: " + estudiante.email + "\n" +
-          "Nombre: " + estudiante.nombre + "\n" +
-          "Fecha de nacimiento: " + datetime.strftime(estudiante.fechaNacimiento, '%d/%m/%Y') + "\n" +
-          "Edad: " + obtenerEdad(estudiante.fechaNacimiento) + "\n" +
-          "Biografía: " + estudiante.biografia + "\n" +
-          "Hobbies: " + estudiante.hobbies)
 
 def mostrarPerfil():
     limpiarPantalla()
@@ -145,7 +130,7 @@ def eliminarPerfil():
     opcion = input('¿Está seguro de que desea eliminar su perfil? s/n: ').lower()
     while opcion != 'n':
         if opcion == 's':
-            eliminarEstudiante(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
+            eliminarUsuario(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
             console.print('Su perfil se eliminó correctamente.', style='green')
             continuar()
             return True
@@ -158,6 +143,18 @@ def eliminarPerfil():
 
 
 # Gestion candidatos S 
+
+# Submenú de gestionar candidatos
+def mostrarGestionarCandidatos():
+    limpiarPantalla()
+    console.print('[bold white]Estas gestionando tus candidatos[/bold white]')
+    console.print('1. Ver candidatos disponibles')
+    console.print('2. Reportar a un candidato')
+    if estudianteActual.revelarCandidatos == True:
+        console.print('3. Revelar candidatos')
+    console.print('0. Volver')
+
+
 def gestionarCandidatos():
     mostrarGestionarCandidatos()
     opcion = input('Seleccione una opcion: ')
@@ -166,6 +163,8 @@ def gestionarCandidatos():
             verCandidatos()
         elif opcion == '2':
             reportarCandidato()
+        elif opcion == '3' and estudianteActual.revelarCandidatos == True:
+            revelarCandidatos()
         else:
             opcionInvalida()
 
@@ -181,7 +180,7 @@ def darLike():
         if nuevoLike.idEmisor == nuevoLike.idReceptor:
             idValida = False
         else:
-            idValida = esIdValida(nuevoLike.idReceptor)
+            idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor)
     except:
         idValida = False
 
@@ -192,7 +191,7 @@ def darLike():
             if nuevoLike.idEmisor == nuevoLike.idReceptor:
                 idValida = False
             else:
-                idValida = esIdValida(nuevoLike.idReceptor)
+                idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor)
         except:
             idValida = False
 
@@ -216,32 +215,73 @@ def darLike():
         likesDbLogica.flush()
         console.print(f'Le diste like a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}', style='green')
         continuar()
-        
 
+def darSuperLike():
+    if estudianteActual.superlike == True:
+        nuevoLike = Like()
+        nuevoLike.idEmisor = estudianteActual.id
 
-def mostrarTodosLosCandidatos():
-    limpiarPantalla()
-    tam = os.path.getsize(estudiantesDbFisica)
-    estudiantesDbLogica.seek(0)
-    while estudiantesDbLogica.tell() < tam:
-        estudiante = pickle.load(estudiantesDbLogica)
-        if (estudiante.estado == True) and (estudiante.email != estudianteActual.email):
-            imprimirDatosDeEstudiante(estudiante)
-            print('\n_________________\n')
+        try:
+            nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle un super-like: '))
+            if nuevoLike.idEmisor == nuevoLike.idReceptor:
+                idValida = False
+            else:
+                idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor)
+        except:
+            idValida = False
 
+        while not idValida:
+            print('ID de usuario no válida.')
+            try:
+                nuevoLike.idReceptor = int(input('Ingrese el ID del usuario para darle un super-like: '))
+                if nuevoLike.idEmisor == nuevoLike.idReceptor:
+                    idValida = False
+                else:
+                    idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor)
+            except:
+                idValida = False
 
+        leDisteLike = False
+        teDioLike = False
+        tam = os.path.getsize(likesDbFisica)
+        likesDbLogica.seek(0)
+        while likesDbLogica.tell() < tam:
+            like = pickle.load(likesDbLogica)
+            if like.idEmisor == nuevoLike.idEmisor and like.idReceptor == nuevoLike.idReceptor and like.estado == True:
+                leDisteLike = True
+            if like.idReceptor == nuevoLike.idEmisor and like.idEmisor == nuevoLike.idReceptor and like.estado == True:
+                teDioLike = True
+
+        if teDioLike and leDisteLike:
+            print('Ya hiciste match con este usuario')
+        else:
+            likesDbLogica.seek(0, os.SEEK_END)
+            pickle.dump(nuevoLike, likesDbLogica)
+            nuevoLike2 = Like()
+            nuevoLike2.idEmisor = nuevoLike.idReceptor
+            nuevoLike2.idReceptor = nuevoLike.idEmisor
+            pickle.dump(nuevoLike2, likesDbLogica)
+            likesDbLogica.flush()
+            console.print(f'Le diste un super-like a {obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, nuevoLike.idReceptor).nombre}', style='green')
+            estudianteActual.superlike = False
+            sobrescribirUsuario(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
+    else:
+        print('Ya usaste tu super-like en el pasado.')
+    continuar()
 
 def verCandidatos():
-    mostrarTodosLosCandidatos()
+    mostrarTodosLosEstudiantes(estudianteActual.id)
 
-    opcion = input('¿Querés darle like a algún estudiante? s/n: ').lower()
+    opcion = input('¿Querés darle like a algún estudiante? s/n o "super" para dar un super-like: ').lower()
     while opcion != 'n':
         if opcion == 's':
             darLike()
+        elif opcion == 'super':
+            darSuperLike()
         else:
             opcionInvalida()
         
-        mostrarTodosLosCandidatos()
+        mostrarTodosLosEstudiantes(estudianteActual.id)
         opcion = input('¿Querés darle like a algún estudiante? s/n: ').lower()
 
 
@@ -254,7 +294,7 @@ def reportar():
         if nuevoReporte.idEmisor == nuevoReporte.idReceptor:
             idValida = False
         else:
-            idValida = esIdValida(nuevoReporte.idReceptor)
+            idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor)
     except:
         idValida = False
 
@@ -265,11 +305,10 @@ def reportar():
             if nuevoReporte.idEmisor == nuevoReporte.idReceptor:
                 idValida = False
             else:
-                idValida = esIdValida(nuevoReporte.idReceptor)
+                idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor)
         except:
             idValida = False
 
-    
 
     yaLoReportaste = False
     tam = os.path.getsize(reportesDbFisica)
@@ -293,7 +332,7 @@ def reportar():
         
 
 def reportarCandidato():
-    mostrarTodosLosCandidatos()
+    mostrarTodosLosEstudiantes(estudianteActual.id)
 
     opcion = input('¿Querés reportar a algún estudiante? s/n: ').lower()
     while opcion != 'n':
@@ -302,8 +341,36 @@ def reportarCandidato():
         else:
             opcionInvalida()
         
-        mostrarTodosLosCandidatos()
+        mostrarTodosLosEstudiantes(estudianteActual.id)
         opcion = input('¿Querés reportar a algún estudiante? s/n: ').lower()
+
+
+def revelarCandidatos():
+    likesDados = []
+    likesRecibidos = []
+    tam = os.path.getsize(likesDbFisica)
+    likesDbLogica.seek(0)
+    while likesDbLogica.tell() < tam:
+        like = pickle.load(likesDbLogica)
+        if like.idEmisor == estudianteActual.id and like.estado == True:
+            likesDados.append(like.idReceptor)
+        if like.idReceptor == estudianteActual.id and like.estado == True:
+            likesRecibidos.append(like.idEmisor)
+
+    hayCandidatos = False
+    limpiarPantalla()
+    for id in likesRecibidos:
+        if id not in likesDados:
+            hayCandidatos = True
+            imprimirDatosDeEstudiante(obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, id))
+
+    if not hayCandidatos:
+        print('No hay candidatos para mostrar')
+    else:
+        estudianteActual.revelarCandidatos = False
+        sobrescribirUsuario(estudiantesDbFisica, estudiantesDbLogica, estudianteActual)
+
+    continuar()
 
 
 def eliminarMatch(likesDados):
@@ -317,14 +384,14 @@ def eliminarMatch(likesDados):
             while likesDbLogica.tell() < tam:
                 pos = likesDbLogica.tell()
                 like = pickle.load(likesDbLogica)
-                if like.idEmisor == estudianteActual.id and like.idReceptor == matchAEliminar:
+                if like.idEmisor == estudianteActual.id and like.idReceptor == matchAEliminar and like.estado == True:
                     like.estado = False
                     likesDbLogica.seek(pos)
                     pickle.dump(like, likesDbLogica)
                     likesDbLogica.flush()
                     tam = 0
 
-    console.print('Eliminaste el match', style='green')
+            console.print('Eliminaste el match', style='green')
 
 def matcheos():
     likesDados = []
@@ -353,10 +420,10 @@ def matcheos():
         while opcion != 'n':
             if opcion == 's':
                 eliminarMatch(likesDados)
+                continuar()
             else:
                 opcionInvalida()
-
-    continuar()
+            opcion = 'n'
             
 
 def reportesEstadisticos():

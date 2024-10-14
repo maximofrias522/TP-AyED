@@ -79,14 +79,6 @@ def mostrarEditarDatos():
     console.print('3. Hobbies')
     console.print('0. Volver')
 
-# Submenú de gestionar candidatos
-def mostrarGestionarCandidatos():
-    limpiarPantalla()
-    console.print('[bold white]Estas gestionando tus candidatos[/bold white]')
-    console.print('1. Ver candidatos disponibles')
-    console.print('2. Reportar a un candidato')
-    console.print('0. Volver')
-
 # Submenú de matcheos
 def mostrarMatcheos():
     limpiarPantalla()
@@ -115,9 +107,9 @@ def mostrarGestionarUsuariosMod():
 def mostrarGestionarUsuariosAdmin():
     limpiarPantalla()
     console.print('[bold white]Gestionando usuarios[/bold white]')
-    console.print('1. Eliminar usuarios(user o modder)')
-    console.print('2. Dar de alta un moderador')
-    console.print('3. Desactivar usuario')
+    console.print('1. Eliminar un estudiante')
+    console.print('2. Eliminar un moderador')
+    console.print('3. Dar de alta un moderador')
     console.print('0. Volver')
 
 # Submenú de gestionar reportes (moderador y administrador)
@@ -127,6 +119,13 @@ def mostrarGestionarReportes():
     console.print('1. Ver reportes')
     console.print('0. Volver')
 
+def mostrarMenuAdmin():
+    limpiarPantalla()
+    console.print('[bold white]Bienvenido a UTN-MATCH![/bold white]')  
+    console.print('1. Gestionar usuarios')
+    console.print('2. Gestionar reportes')
+    console.print('3. Reportes estadísticos')
+    console.print('0. [red]Salir[/red]')
 
 
 
