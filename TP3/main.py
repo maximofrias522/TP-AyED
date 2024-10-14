@@ -146,8 +146,29 @@ def generarEstudiante(): # retorna un Estudiante o -1 si ya está registrado
         console.print('La contraseña no puede estar vacía.', style='red')
         nuevoEstudiante.contrasena = input('Introduzca su contraseña: ').ljust(50)
     nuevoEstudiante.nombre = input('Introduzca su nombre: ').ljust(50)
+    nuevoEstudiante.biografia = input('Introduzca su biografia: ').ljust(50)
+    nuevoEstudiante.hobbies = input('Introduzca sus hobbies: ').ljust(50)
+    nuevoEstudiante.fechaNacimiento = obtenerFecha()
     return nuevoEstudiante
 
+def obtenerFecha(): 
+    formato_correcto = False 
+    while not formato_correcto: 
+        fecha = input("Ingrese su fecha de nacimiento (dd/mm/aaaa): ")
+        try:
+            dtfecha = datetime.strptime(fecha, "%d/%m/%Y") 
+            if dtfecha > datetime.today(): 
+                console.print("La fecha introducida no es válida. Intente nuevamente.", style='red') 
+            else:
+                formato_correcto = True
+
+        except ValueError as ve:
+            if "does not match format" in str(ve):
+                console.print("El formato de fecha ingresado es incorrecto. Intente nuevamente.", style='red') 
+            else:
+                console.print("Fecha fuera de rango. Intente nuevamente.", style='red') 
+
+    return dtfecha
 
 
 def registrarEstudiante():
