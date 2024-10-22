@@ -63,13 +63,13 @@ def verReportes():
     table.add_column("Motivo", style="bold red", justify="right")
     table.add_column("Estado", style="bold yellow", justify='right')
 
-    with open("estudiantesDbFisica", "rb") as estudiantesDbLogica:
-        tames = os.path.getsize("estudiantesDbFisica")
+    with open(estudiantesDbFisica, "rb"):
+        tames = os.path.getsize(estudiantesDbFisica)
         estudiantesDbLogica.seek(0)  
 
-        with open("reportesDbFisica", "rb") as reportesDbLogica:
+        with open(reportesDbFisica, "rb"):
         
-            tam = os.path.getsize("reportesDbFisica")
+            tam = os.path.getsize(reportesDbFisica)
             reportesDbLogica.seek(0)  
 
             while reportesDbLogica.tell() < tam:
@@ -113,7 +113,7 @@ def eliminarUsuario():
     opcion = input('Introduza el ID del usuario a eliminar o -1 para volver: ')
     while opcion != '-1':
         try:
-            if esIdValida(opcion):
+            if esIdValida(estudiantesDbFisica, estudiantesDbLogica, opcion):
                 eliminarUsuario(estudiantesDbFisica, estudiantesDbLogica, obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, opcion))
                 console.print('El usuario se eliminó correctamente.', style='green')
                 continuar()

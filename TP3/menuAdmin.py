@@ -86,7 +86,7 @@ def eliminarModerador():
     eliminarAux(estudiantesDbFisica, estudiantesDbLogica)
 
 def darDeAltaModerador():
-    mostrarTodosLosEstudiantes(-1)
+    mostrarTodosLosEstudiantes(1)
     opcion = input('Introduza el ID del estudiante para hacerlo moderador o -1 para volver: ')
     while opcion != '-1':
         if esIdValida(estudiantesDbFisica, estudiantesDbLogica, opcion):
@@ -114,6 +114,7 @@ def darDeAltaModerador():
         else:
             opcionInvalida()
         opcion = input('Introduza el ID del estudiante para hacerlo moderador o -1 para volver: ')
+        gestionarUsuarios()
 
 def idxmax(lista):
     idx = -1
@@ -147,17 +148,18 @@ def reportesEstadisticos():
             moderadoresIgnorado[reporte.idMod] += 1
 
     print(f'Reportes totales: {reportesTotales}')
-    print(f'Reportes ignorados: {reportesIgnorados * 100 / reportesTotales}%')
-    print(f'Reportes aceptados: {reportesAceptados * 100 / reportesTotales}%')
+    if reportesTotales != 0:
+        print(f'Reportes ignorados: {reportesIgnorados * 100 / reportesTotales}%')
+        print(f'Reportes aceptados: {reportesAceptados * 100 / reportesTotales}%')
 
-    modIgnorado = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresIgnorado))
-    print(f'El moderador que más reportes ignoró fue: {modIgnorado.nombre}')
+        modIgnorado = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresIgnorado))
+        print(f'El moderador que más reportes ignoró fue: {modIgnorado.nombre}')
 
-    modAceptado = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresAceptado))
-    print(f'El moderador que más reportes aceptó fue: {modAceptado.nombre}')
+        modAceptado = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresAceptado))
+        print(f'El moderador que más reportes aceptó fue: {modAceptado.nombre}')
 
-    modTotal = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresTotal))
-    print(f'El moderador que más reportes procesó fue: {modTotal.nombre}')
+        modTotal = obtenerUsuario(moderadoresDbFisica, moderadoresDbLogica, idxmax(moderadoresTotal))
+        print(f'El moderador que más reportes procesó fue: {modTotal.nombre}')
     continuar()
 
 def obtenerPuntaje(id):

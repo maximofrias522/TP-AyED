@@ -308,7 +308,9 @@ def reportar():
                 idValida = esIdValida(estudiantesDbFisica, estudiantesDbLogica, nuevoReporte.idReceptor)
         except:
             idValida = False
-
+    
+    motivo = input("Ingrese el motivo del reporte: ")
+    nuevoReporte.motivo = motivo
 
     yaLoReportaste = False
     tam = os.path.getsize(reportesDbFisica)
@@ -359,10 +361,12 @@ def revelarCandidatos():
 
     hayCandidatos = False
     limpiarPantalla()
+    cant = 3
     for id in likesRecibidos:
-        if id not in likesDados:
+        if id not in likesDados and cant > 0:
             hayCandidatos = True
             imprimirDatosDeEstudiante(obtenerUsuario(estudiantesDbFisica, estudiantesDbLogica, id))
+            cant -= 1
 
     if not hayCandidatos:
         print('No hay candidatos para mostrar')

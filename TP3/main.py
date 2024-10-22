@@ -212,6 +212,40 @@ def menuInicial():
     administradoresDbLogica.close()
 
 
+if os.path.getsize(estudiantesDbFisica) == 0:
+    estudiante1 = Estudiante()
+    estudiante1.id = 0
+    estudiante1.email = 'est1@email.com'.ljust(50)
+    estudiante1.nombre = 'Juan Perez'.ljust(50)
+    estudiante1.contrasena = '123'.ljust(50)
+    estudiante1.fechaNacimiento = datetime(2000, 3, 1)
+    estudiante1.biografia = 'De Rosario, estudió en el Normal 1 y es hincha de Aldosivi'.ljust(50)
+    estudiante1.hobbies = 'Ver torneos de waterpolo, cocinar y mirar la pared'.ljust(50)
+
+    estudiante2 = Estudiante()
+    estudiante2.id = 1
+    estudiante2.email = 'est2@email.com'.ljust(50)
+    estudiante2.nombre = 'Marco Russo'.ljust(50)
+    estudiante2.contrasena = '19'.ljust(50)
+    estudiante2.fechaNacimiento = datetime(1999, 12, 25)
+    estudiante2.biografia = 'Estudió en la secundaria de Baigorria y nació en Paraná'.ljust(50)
+    estudiante2.hobbies = 'Jugar al Minecraft'.ljust(50)
+
+    estudiante3 = Estudiante()
+    estudiante3.id = 2
+    estudiante3.email = 'est3@email.com'.ljust(50)
+    estudiante3.nombre = 'Rafael Nadal'.ljust(50)
+    estudiante3.contrasena = '123'.ljust(50)
+    estudiante3.fechaNacimiento = datetime(2006, 1, 1)
+    estudiante3.biografia = 'De España, pasé mi adolescencia en Francia'.ljust(50)
+    estudiante3.hobbies = 'Odio el tenis, toco el piano'.ljust(50)
+
+    pickle.dump(estudiante1, estudiantesDbLogica)
+    pickle.dump(estudiante2, estudiantesDbLogica)
+    pickle.dump(estudiante3, estudiantesDbLogica)
+    estudiantesDbLogica.flush()
+
+
 if os.path.getsize(administradoresDbFisica) == 0:
     admin = Administrador()
     admin.email = 'admin@ayed.com'.ljust(50)
